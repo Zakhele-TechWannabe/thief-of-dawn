@@ -1,0 +1,13 @@
+from generate import *
+base=json.loads((R/'shade.json').read_text())['image']
+request('shade_attack_retry','animate-with-text-v3',{'first_frame':base,'action':'This exact hooded violet guard remains in full side profile FACING RIGHT and thrusts his curved short sword forward toward the right, then returns to guard. Preserve original narrow humanoid body, hood and pale mask. NO turning away, no spinning, no giant swoosh effects. Fixed camera and scale.','frame_count':4,'no_background':True},.025)
+for actor,desc in [('vesh','Captain Vesh, armoured Valerin traitor captain with GREEN SKIN, grey steel breastplate helmet and greaves, long red cloak behind him, curved short sword held forward. Tall lean realistic adult human proportions.'),('morrow','Morrow the Hollow, tall slender spectral Tenebri scholar in long tattered dark violet robes, hollow white mask-like face with black eye sockets, hood, carries small glowing gold Lantern of Eterna in forward hand. No sword. Tall realistic humanoid proportions, mysterious silhouette.')]:
+ if not (R/(actor+'.json')).exists() and spent()+.14>.90:
+  print('Budget leaves '+actor+' as documented local variant',flush=True);continue
+ request(actor,'create-image-pixflux',{'description':desc+' Full body SIDE PROFILE FACING RIGHT. Cinematic fantasy platformer pixel art. About 48 pixels tall centered in 64 pixel canvas, transparent background, no ground shadow.','image_size':{'width':64,'height':64},'view':'side','direction':'east','no_background':True},.012)
+ base=json.loads((R/(actor+'.json')).read_text())['image']
+ for name,action in {'walk':'walking in place toward right','attack':('short sword thrust forward toward right' if actor=='vesh' else 'raising glowing lantern to cast a shadow spell toward right'),'block':('holding sword upright to parry an attack from right' if actor=='vesh' else 'raising free hand in front to conjure a violet ward'),'hurt':'brief recoil backwards from a hit, keep facing right','death':'collapsing onto the ground and lying still'}.items():
+  if name=='death':
+   request(actor+'_'+name,'animate-with-text-v3',{'first_frame':base,'action':'Side profile facing RIGHT. '+desc+' Stagger, knees buckle, fall sideways, settle flat on the ground and remain completely motionless for the final two frames. Preserve exact reference design, fixed camera and scale, no recovery.','frame_count':8,'no_background':True},.05)
+   continue
+  request(actor+'_'+name,'animate-with-text',{'reference_image':base,'description':desc+' Preserve reference design and colours.','action':action+', full side profile facing right, fixed camera and scale','image_size':{'width':64,'height':64},'n_frames':4,'view':'side','direction':'east','image_guidance_scale':2.2},.025)

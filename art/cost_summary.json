@@ -1,0 +1,8 @@
+{
+  "spent_usd": 0.91544187855721,
+  "completed_response_usage_usd": 0.8787675274080701,
+  "unrecovered_job_charge_inferred_usd": 0.03667435114913997,
+  "inferred_job": "morrow_death_retry",
+  "note": "DNS interrupted the call/poll response; initial job UUID was not retained by the wrapper. The late charge appeared during the shade-hurt retry and is included in that ledger balance change. No additional Morrow POST was submitted.",
+  "successful_calls": 69
+}

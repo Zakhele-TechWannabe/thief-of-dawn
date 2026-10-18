@@ -1,0 +1,13 @@
+{
+  "counts": {
+    "backgrounds": 5,
+    "props": 13,
+    "ui": 6,
+    "sprites": 92,
+    "tiles": 25
+  },
+  "issues": [
+    "shade/death: missing (engine placeholder)",
+    "morrow/death: missing (engine placeholder)"
+  ]
+}

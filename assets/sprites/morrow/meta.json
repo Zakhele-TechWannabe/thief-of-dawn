@@ -1,0 +1,32 @@
+{
+  "frame_size": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    60
+  ],
+  "anims": {
+    "idle": {
+      "fps": 6,
+      "loop": true
+    },
+    "walk": {
+      "fps": 8,
+      "loop": true
+    },
+    "attack": {
+      "fps": 12,
+      "loop": false
+    },
+    "block": {
+      "fps": 8,
+      "loop": true
+    },
+    "hurt": {
+      "fps": 8,
+      "loop": false
+    }
+  }
+}

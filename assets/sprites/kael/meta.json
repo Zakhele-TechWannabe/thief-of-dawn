@@ -1,0 +1,52 @@
+{
+  "frame_size": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    60
+  ],
+  "anims": {
+    "idle": {
+      "fps": 6,
+      "loop": true
+    },
+    "run": {
+      "fps": 12,
+      "loop": true
+    },
+    "jump": {
+      "fps": 8,
+      "loop": false
+    },
+    "fall": {
+      "fps": 8,
+      "loop": true
+    },
+    "hang": {
+      "fps": 8,
+      "loop": true
+    },
+    "climb": {
+      "fps": 8,
+      "loop": false
+    },
+    "attack": {
+      "fps": 12,
+      "loop": false
+    },
+    "block": {
+      "fps": 8,
+      "loop": true
+    },
+    "hurt": {
+      "fps": 8,
+      "loop": false
+    },
+    "death": {
+      "fps": 7,
+      "loop": false
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "rejected": {
+    "kael_jump": "Legacy clip shrinks and somersaults; requires one improved retry.",
+    "kael_block": "Legacy clip faces away and oversized sword effects.",
+    "kael_hurt": "Legacy clip changes tunic to a pale shirt.",
+    "shade_death": "Legacy clip consists of giant rectangular blade effects.",
+    "kael_idle": "Breathing clip changes clothing; base pose used.",
+    "kael_hang": "Changes palette and proportions; climb overhead pose used.",
+    "shade_idle": "Blade trail exaggerated; base pose used.",
+    "kael_attack": "Legacy clip changes clothing and enlarges blade; v3 retry for consistency.",
+    "kael_death": "Legacy collapse changes outfit and returns to standing later; v3 retry.",
+    "kael_fall": "Frontal frames and clothing drift; using accepted v3 jump descending pose.",
+    "shade_attack": "Legacy clip turns away from camera and adds huge sword trails; one v3 retry queued.",
+    "shade_block": "Opening blade effects oversized; selected closing two right-profile frames only.",
+    "shade_hurt": "Legacy hurt includes rectangular white sword effects and altered head; one reserved-budget v3 retry queued.",
+    "shade_death_retry": "Second attempt only bends into a guard crouch; no death. No further retry; engine placeholder retained.",
+    "vesh_walk": "Opening frame is frontal; use three right-profile frames and remove ground pedestal locally.",
+    "vesh_attack": "Legacy attack faces away; needs one retry.",
+    "vesh_block": "Opaque background and frontal poses; needs one retry.",
+    "vesh_hurt": "Opening frames face front; last right-profile recoil pose retained as a single frame.",
+    "morrow_walk": "Legacy clip paints an opaque grey background and changes design; one v3 retry queued.",
+    "morrow_attack": "Legacy clip paints an opaque grey background and changes design; one v3 retry queued.",
+    "morrow_block": "Later frontal poses discarded; retain first two right-profile Lantern guard frames.",
+    "morrow_hurt": "Final two poses are frontal with opaque background; retain first two transparent right-profile poses.",
+    "morrow_death": "Eight-frame collapse only leans forward; one dissolve retry with an explicit empty end frame queued, budget permitting.",
+    "morrow_death_retry": "Retry failed: <urlopen error [Errno -3] Temporary failure in name resolution>"
+  },
+  "approved": [
+    "kael",
+    "kael_run"
+  ],
+  "notes": [
+    "Idle uses original reference as a stable single pose because the legacy breathing clip changes his clothing.",
+    "Hang uses overhead ledge-gripping climb frame 1; generated hanging frames were pale and inconsistent.",
+    "Shade idle uses original reference; generated breathing clip exaggerates the blade.",
+    "Shade block uses the final two right-profile frames; oversized opening blade effects rejected.",
+    "Final fall uses the descending airborne pose from the accepted v3 jump, maintaining the original character identity.",
+    "Run omits the v3 reference frame so the four moving frames form the loop.",
+    "Shade death is absent after two unsuccessful attempts; engine must use its procedural placeholder. Kael death ends in a seated collapse rather than fully flat.",
+    "Shade walk frames 1 and 2 originally face left and are mirrored locally to face right.",
+    "Ground fixtures (spikes, pressure plate and loose floor) are locally cropped and aligned to the bottom edge of their required canvases.",
+    "Sword pickup is a straight silver blade; combat sprites use the short curved blade interpretation.",
+    "Final Kael run/jump/attack/block/hurt/death and shade attack use v3 clips from their original base references; accepted retries supersede rejected legacy clips.",
+    "Vesh source contains a brown ground pedestal despite the prompt. The offline build removes wide brown ground rows below his boots; the walk uses right-profile frames 1\u20133.",
+    "Vesh hurt retains the final right-profile pose as a static recoil state; frontal frames rejected.",
+    "Legacy Kael hang/climb frames were drawn with undersized anatomy; a fixed 1.18 scale correction restores a body near the standing reference size while keeping the same foot anchor.",
+    "Morrow hurt retains the first two transparent right-profile recoil poses; later frontal/background frames are discarded.",
+    "Morrow block uses the first two consistent Lantern-holding guard poses as a held defensive state; a separate ward effect was not generated.",
+    "Gate, spikes and slicer metal is brightened locally for readability against the dark level backgrounds."
+  ],
+  "frames": {
+    "kael_idle": {
+      "source": "kael",
+      "indices": [
+        0
+      ]
+    },
+    "kael_hang": {
+      "source": "kael_climb",
+      "indices": [
+        1
+      ]
+    },
+    "kael_fall": {
+      "source": "kael_jump_retry",
+      "indices": [
+        4
+      ]
+    },
+    "kael_death": {
+      "source": "kael_death",
+      "indices": [
+        0,
+        1
+      ]
+    },
+    "shade_idle": {
+      "source": "shade",
+      "indices": [
+        0
+      ]
+    },
+    "shade_attack": {
+      "source": "shade_attack",
+      "indices": [
+        2,
+        3
+      ]
+    },
+    "shade_block": {
+      "source": "shade_block",
+      "indices": [
+        2,
+        3
+      ]
+    },
+    "shade_hurt": {
+      "source": "shade_hurt",
+      "indices": [
+        2,
+        3
+      ]
+    },
+    "kael_run": {
+      "source": "kael_run",
+      "indices": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "shade_walk": {
+      "source": "shade_walk",
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "mirror": [
+        1,
+        2
+      ]
+    },
+    "vesh_walk": {
+      "source": "vesh_walk",
+      "indices": [
+        1,
+        2,
+        3
+      ]
+    },
+    "vesh_hurt": {
+      "source": "vesh_hurt",
+      "indices": [
+        3
+      ]
+    },
+    "morrow_hurt": {
+      "source": "morrow_hurt",
+      "indices": [
+        0,
+        1
+      ]
+    },
+    "morrow_block": {
+      "source": "morrow_block",
+      "indices": [
+        0,
+        1
+      ]
+    }
+  },
+  "prefer_retry": [
+    "kael_jump",
+    "kael_block",
+    "kael_hurt",
+    "shade_death",
+    "kael_attack",
+    "kael_death",
+    "shade_attack",
+    "vesh_attack",
+    "vesh_block",
+    "morrow_walk",
+    "morrow_attack",
+    "morrow_block",
+    "morrow_death",
+    "shade_hurt"
+  ],
+  "omit": [
+    "shade_death",
+    "morrow_death"
+  ],
+  "pending_retry": [
+    "vesh_attack",
+    "vesh_block",
+    "morrow_walk",
+    "morrow_attack",
+    "morrow_death",
+    "shade_hurt"
+  ]
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "item": "prop_torch",
+    "endpoint": "create-image-pixflux",
+    "error": "HTTP 422: Canvas must be size 32x32 area or larger",
+    "resolution": "All props now generated at twice target width/height and downsampled nearest-neighbour. Original request saved as prop_torch.failed.request.json.",
+    "charged_usd": 0
+  },
+  {
+    "item": "title",
+    "endpoint": "create-image-pixflux-background",
+    "error": "240x135 dimensions must be divisible by four; async job failed before generation",
+    "resolution": "Retry at 240x136, nearest-neighbour double and crop vertical one pixel per edge",
+    "charged_usd": 0
+  },
+  {
+    "item": "morrow_death_retry",
+    "endpoint": "animate-with-text-v3",
+    "error": "Temporary failure in name resolution; generation response not returned",
+    "prompt": "Morrow the Hollow rapidly dissolves into violet smoke and vanishes into dawn. His mask and robe break apart into scattered pixels, the whole body disappears. The final frame is empty transparent background. Keep side profile facing RIGHT as he fades; no camera movement.",
+    "request_file": "art/raw/morrow_death_retry.request.json",
+    "usd_delta_observed_at_followup": 0,
+    "spent_at_followup_usd": 0.85889748791192,
+    "resolution": "No resubmission to avoid duplicate spend and a third attempt. Morrow death uses procedural placeholder.",
+    "late_charge_inferred_usd": 0.03667435114913997,
+    "charge_inference": "Final spent minus all successful response USD usage. The late charge is recorded in shade_hurt_retry ledger balance delta.",
+    "recovery_limitation": "No job UUID returned to caller before DNS error; cannot poll/export the paid result without that UUID."
+  }
+]

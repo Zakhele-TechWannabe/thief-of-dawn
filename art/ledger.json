@@ -1,0 +1,489 @@
+{
+  "cap_usd": 1.0,
+  "baseline_usd": 4.34039846665992,
+  "calls": [
+    {
+      "time": "2026-10-18T21:10:57",
+      "endpoint": "create-image-pixflux",
+      "note": "kael",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.0
+    },
+    {
+      "time": "2026-10-18T21:14:54",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_run",
+      "cost_usd": 0.01989,
+      "spent_total_usd": 0.0265
+    },
+    {
+      "time": "2026-10-18T21:16:31",
+      "endpoint": "animate-with-text",
+      "note": "kael_idle",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.0265
+    },
+    {
+      "time": "2026-10-18T21:17:23",
+      "endpoint": "animate-with-text",
+      "note": "kael_jump",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.04273
+    },
+    {
+      "time": "2026-10-18T21:18:13",
+      "endpoint": "animate-with-text",
+      "note": "kael_fall",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.05899
+    },
+    {
+      "time": "2026-10-18T21:18:50",
+      "endpoint": "animate-with-text",
+      "note": "kael_hang",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.07687
+    },
+    {
+      "time": "2026-10-18T21:19:22",
+      "endpoint": "animate-with-text",
+      "note": "kael_climb",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.09248
+    },
+    {
+      "time": "2026-10-18T21:19:44",
+      "endpoint": "animate-with-text",
+      "note": "kael_attack",
+      "cost_usd": 0.0144,
+      "spent_total_usd": 0.10688
+    },
+    {
+      "time": "2026-10-18T21:20:18",
+      "endpoint": "animate-with-text",
+      "note": "kael_block",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.11939
+    },
+    {
+      "time": "2026-10-18T21:20:56",
+      "endpoint": "animate-with-text",
+      "note": "kael_hurt",
+      "cost_usd": 0.01539,
+      "spent_total_usd": 0.13478
+    },
+    {
+      "time": "2026-10-18T21:21:27",
+      "endpoint": "animate-with-text",
+      "note": "kael_death",
+      "cost_usd": 0.01261,
+      "spent_total_usd": 0.16341
+    },
+    {
+      "time": "2026-10-18T21:21:55",
+      "endpoint": "create-image-pixflux",
+      "note": "shade",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.16341
+    },
+    {
+      "time": "2026-10-18T21:22:35",
+      "endpoint": "animate-with-text",
+      "note": "shade_idle",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.17015
+    },
+    {
+      "time": "2026-10-18T21:23:14",
+      "endpoint": "animate-with-text",
+      "note": "shade_walk",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.18596
+    },
+    {
+      "time": "2026-10-18T21:23:36",
+      "endpoint": "animate-with-text",
+      "note": "shade_attack",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.20218
+    },
+    {
+      "time": "2026-10-18T21:24:15",
+      "endpoint": "animate-with-text",
+      "note": "shade_block",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.21472
+    },
+    {
+      "time": "2026-10-18T21:24:49",
+      "endpoint": "animate-with-text",
+      "note": "shade_hurt",
+      "cost_usd": 0.01581,
+      "spent_total_usd": 0.23053
+    },
+    {
+      "time": "2026-10-18T21:25:50",
+      "endpoint": "animate-with-text",
+      "note": "shade_death",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.24592
+    },
+    {
+      "time": "2026-10-18T21:28:46",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_jump_retry",
+      "cost_usd": 0.01984,
+      "spent_total_usd": 0.28396
+    },
+    {
+      "time": "2026-10-18T21:30:55",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_block_retry",
+      "cost_usd": 0.02182,
+      "spent_total_usd": 0.30578
+    },
+    {
+      "time": "2026-10-18T21:34:11",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_hurt_retry",
+      "cost_usd": 0.02133,
+      "spent_total_usd": 0.3271
+    },
+    {
+      "time": "2026-10-18T21:36:26",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_attack_retry",
+      "cost_usd": 0.02254,
+      "spent_total_usd": 0.34964
+    },
+    {
+      "time": "2026-10-18T21:40:25",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_death_retry",
+      "cost_usd": 0.02473,
+      "spent_total_usd": 0.37437
+    },
+    {
+      "time": "2026-10-18T21:42:53",
+      "endpoint": "animate-with-text-v3",
+      "note": "shade_death_retry",
+      "cost_usd": 0.02379,
+      "spent_total_usd": 0.39816
+    },
+    {
+      "time": "2026-10-18T21:44:40",
+      "endpoint": "create-tileset-sidescroller",
+      "note": "tiles1",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.39816
+    },
+    {
+      "time": "2026-10-18T21:46:46",
+      "endpoint": "create-tileset-sidescroller",
+      "note": "tiles2",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.39816
+    },
+    {
+      "time": "2026-10-18T21:49:07",
+      "endpoint": "create-tileset-sidescroller",
+      "note": "tiles3",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.39816
+    },
+    {
+      "time": "2026-10-18T21:51:38",
+      "endpoint": "create-tileset-sidescroller",
+      "note": "tiles4",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.39816
+    },
+    {
+      "time": "2026-10-18T21:53:59",
+      "endpoint": "create-tileset-sidescroller",
+      "note": "tiles5",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.39816
+    },
+    {
+      "time": "2026-10-18T21:54:45",
+      "endpoint": "create-image-pixflux-background",
+      "note": "background1",
+      "cost_usd": 0.00649,
+      "spent_total_usd": 0.40465
+    },
+    {
+      "time": "2026-10-18T21:56:23",
+      "endpoint": "create-image-pixflux-background",
+      "note": "background2",
+      "cost_usd": 0.00666,
+      "spent_total_usd": 0.41131
+    },
+    {
+      "time": "2026-10-18T21:57:08",
+      "endpoint": "create-image-pixflux-background",
+      "note": "background3",
+      "cost_usd": 0.00724,
+      "spent_total_usd": 0.41855
+    },
+    {
+      "time": "2026-10-18T21:58:15",
+      "endpoint": "create-image-pixflux-background",
+      "note": "background4",
+      "cost_usd": 0.00598,
+      "spent_total_usd": 0.42453
+    },
+    {
+      "time": "2026-10-18T21:59:30",
+      "endpoint": "create-image-pixflux-background",
+      "note": "background5",
+      "cost_usd": 0.00696,
+      "spent_total_usd": 0.43149
+    },
+    {
+      "time": "2026-10-18T22:00:56",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_torch",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.43149
+    },
+    {
+      "time": "2026-10-18T22:01:24",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_potion_small",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.43803
+    },
+    {
+      "time": "2026-10-18T22:01:51",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_potion_big",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.44509
+    },
+    {
+      "time": "2026-10-18T22:02:17",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_sword",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.45155
+    },
+    {
+      "time": "2026-10-18T22:03:49",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_lantern",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.45862
+    },
+    {
+      "time": "2026-10-18T22:04:31",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_exit_door",
+      "cost_usd": 0.02108,
+      "spent_total_usd": 0.4797
+    },
+    {
+      "time": "2026-10-18T22:04:57",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_gate",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.4797
+    },
+    {
+      "time": "2026-10-18T22:05:21",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_spikes",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.48597
+    },
+    {
+      "time": "2026-10-18T22:06:00",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_loose_floor",
+      "cost_usd": 0.00674,
+      "spent_total_usd": 0.49271
+    },
+    {
+      "time": "2026-10-18T22:06:27",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_plate",
+      "cost_usd": 0.00644,
+      "spent_total_usd": 0.50689
+    },
+    {
+      "time": "2026-10-18T22:06:54",
+      "endpoint": "create-image-pixflux",
+      "note": "prop_slicer",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.50689
+    },
+    {
+      "time": "2026-10-18T22:10:02",
+      "endpoint": "animate-with-text-v3",
+      "note": "shade_attack_retry",
+      "cost_usd": 0.02135,
+      "spent_total_usd": 0.53495
+    },
+    {
+      "time": "2026-10-18T22:10:20",
+      "endpoint": "create-image-pixflux",
+      "note": "vesh",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.53495
+    },
+    {
+      "time": "2026-10-18T22:10:52",
+      "endpoint": "animate-with-text",
+      "note": "vesh_walk",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.54107
+    },
+    {
+      "time": "2026-10-18T22:11:18",
+      "endpoint": "animate-with-text",
+      "note": "vesh_attack",
+      "cost_usd": 0.01294,
+      "spent_total_usd": 0.56762
+    },
+    {
+      "time": "2026-10-18T22:11:43",
+      "endpoint": "animate-with-text",
+      "note": "vesh_block",
+      "cost_usd": 0.01265,
+      "spent_total_usd": 0.58026
+    },
+    {
+      "time": "2026-10-18T22:12:21",
+      "endpoint": "animate-with-text",
+      "note": "vesh_hurt",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.58026
+    },
+    {
+      "time": "2026-10-18T22:16:04",
+      "endpoint": "animate-with-text-v3",
+      "note": "vesh_death",
+      "cost_usd": 0.04306,
+      "spent_total_usd": 0.62332
+    },
+    {
+      "time": "2026-10-18T22:16:33",
+      "endpoint": "create-image-pixflux",
+      "note": "morrow",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.62332
+    },
+    {
+      "time": "2026-10-18T22:17:08",
+      "endpoint": "animate-with-text",
+      "note": "morrow_walk",
+      "cost_usd": 0.00668,
+      "spent_total_usd": 0.63
+    },
+    {
+      "time": "2026-10-18T22:17:49",
+      "endpoint": "animate-with-text",
+      "note": "morrow_attack",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.64435
+    },
+    {
+      "time": "2026-10-18T22:18:26",
+      "endpoint": "animate-with-text",
+      "note": "morrow_block",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.66017
+    },
+    {
+      "time": "2026-10-18T22:19:16",
+      "endpoint": "animate-with-text",
+      "note": "morrow_hurt",
+      "cost_usd": 0.01432,
+      "spent_total_usd": 0.67449
+    },
+    {
+      "time": "2026-10-18T22:23:26",
+      "endpoint": "animate-with-text-v3",
+      "note": "morrow_death",
+      "cost_usd": 0.02893,
+      "spent_total_usd": 0.71906
+    },
+    {
+      "time": "2026-10-18T22:24:01",
+      "endpoint": "create-image-pixflux",
+      "note": "mark_traversa",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.71906
+    },
+    {
+      "time": "2026-10-18T22:24:25",
+      "endpoint": "create-image-pixflux",
+      "note": "mark_vitaria",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.72548
+    },
+    {
+      "time": "2026-10-18T22:25:04",
+      "endpoint": "create-image-pixflux",
+      "note": "mark_ascenda",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.73195
+    },
+    {
+      "time": "2026-10-18T22:25:43",
+      "endpoint": "create-image-pixflux",
+      "note": "mark_eterna",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.73912
+    },
+    {
+      "time": "2026-10-18T22:26:41",
+      "endpoint": "create-image-pixflux",
+      "note": "mark_enigma",
+      "cost_usd": 0.00693,
+      "spent_total_usd": 0.74604
+    },
+    {
+      "time": "2026-10-18T22:29:44",
+      "endpoint": "create-image-pixflux-background",
+      "note": "title",
+      "cost_usd": 0.00667,
+      "spent_total_usd": 0.76265
+    },
+    {
+      "time": "2026-10-18T22:33:45",
+      "endpoint": "animate-with-text-v3",
+      "note": "vesh_attack_retry",
+      "cost_usd": 0.02009,
+      "spent_total_usd": 0.78274
+    },
+    {
+      "time": "2026-10-18T22:38:41",
+      "endpoint": "animate-with-text-v3",
+      "note": "vesh_block_retry",
+      "cost_usd": 0.03112,
+      "spent_total_usd": 0.81386
+    },
+    {
+      "time": "2026-10-18T22:42:29",
+      "endpoint": "animate-with-text-v3",
+      "note": "morrow_walk_retry",
+      "cost_usd": 0.02362,
+      "spent_total_usd": 0.83749
+    },
+    {
+      "time": "2026-10-18T22:47:18",
+      "endpoint": "animate-with-text-v3",
+      "note": "morrow_attack_retry",
+      "cost_usd": 0.02141,
+      "spent_total_usd": 0.8589
+    },
+    {
+      "time": "2026-10-18T22:57:26",
+      "endpoint": "animate-with-text-v3",
+      "note": "shade_hurt_retry",
+      "cost_usd": 0.05654,
+      "spent_total_usd": 0.91544
+    }
+  ]
+}
