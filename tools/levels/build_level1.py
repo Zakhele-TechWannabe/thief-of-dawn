@@ -30,7 +30,7 @@ put(9, 25, "t"); put(24, 23, "t"); put(16, 13, "w")
 
 # B — the galleries (cols 27-75): spike gap, planks up to an alcove
 fill(27, 100, 3, 8)
-put(48, 9, "L")
+put(48, 9, "l")
 fill(47, 52, 30, 30, "^")                # spikes at the bottom of the gap
 fill(53, 99, 24, 30)                     # far side of the gap: the hall floor
 fill(32, 36, 20, 20, "="); fill(38, 42, 16, 16, "=")
@@ -42,7 +42,7 @@ put(34, 21, "t"); put(44, 18, "t")
 
 # C — Whisper Hall (cols 53-99): checkpoint, first shade
 put(56, 23, "k"); put(61, 23, "3"); put(76, 23, "s")
-put(68, 9, "L"); put(84, 9, "L"); put(72, 10, "w"); put(94, 10, "w")
+put(68, 9, "l"); put(84, 9, "l"); put(72, 10, "w"); put(94, 10, "w")
 for c in range(62, 72):
     for r in (13, 14, 16, 17):
         put(c, r, "b")
@@ -61,7 +61,7 @@ put(150, 10, "w"); put(143, 22, "t"); put(157, 15, "t"); put(149, 30, "h")
 
 # F — the scriptorium door (cols 159-181)
 put(170, 15, "s"); put(176, 15, "5"); put(179, 15, "E")
-put(165, 9, "L"); put(174, 9, "L")
+put(165, 9, "l"); put(174, 9, "l")
 for c in range(161, 169):
     for r in (11, 12, 14):
         put(c, r, "b")

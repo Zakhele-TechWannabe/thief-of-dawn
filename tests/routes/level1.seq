@@ -1,0 +1,33 @@
+# Vault step and seven-tile ledge grab.
+0+move_right
+60+jump
+100-jump
+165+jump
+205-jump
+# Six-tile spike gap, then jump past the gallery guard.
+355+jump
+395-jump
+470+jump
+510-jump
+570+jump
+610-jump
+# Low crypt: roll through the shades.
+790+dodge
+791-dodge
+825+dodge
+826-dodge
+860+dodge
+861-dodge
+895+dodge
+896-dodge
+# Three pillars: take off before running off each narrow top.
+970+jump
+1005-jump
+1008+jump
+1048-jump
+1052+jump
+1092-jump
+# Stop at the exit and enter with UP.
+1190-move_right
+1200+up
+1201-up

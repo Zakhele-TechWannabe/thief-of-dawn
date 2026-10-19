@@ -1,7 +1,8 @@
 # Roadmap
 
-The foundation (level 1, Kael, the shade, combat, HUD, level format) is built. This is what comes next, in order.
-Keep each step playable; take screenshots (`--shot`) and run the smoke test after each.
+Levels 1 and 2, Kael, shades and archers, combat, HUD, resettable loose floors, and scripted exit routes are built.
+This is what comes next, in order.
+Keep each step playable; take screenshots (`--shot`, when a display is accessible) and run `tests/run.sh` after each.
 
 ## Design pillars
 
@@ -27,12 +28,15 @@ Grant the Mark on the level-complete card with a short reveal and a one-line exp
 
 ## Next steps
 
-1. **Level 1 polish**: a scripted-input playthrough from `@` to `E` (proves it's completable), tune hint text,
+1. **Level 1 polish (route complete)**: the committed `tests/routes/level1.seq` proves `@` to `E` using unchanged movement and geometry. Future polish: tune hint text,
    place 1–2 more shades on the upper galleries, add one optional secret (big potion) reachable only with a
    tricky ledge sequence.
-2. **Level 2: The Deep Mines of Norra** (theme 2): new hazards (loose floor `L` that shakes then falls, mine-cart
-   rails, dripping water), a new enemy (**Norran stone-hound** or a shade **archer** that must be closed on), wall-jump
-   shafts. Needs: tiles/backgrounds already exist for theme 2.
+2. **Level 2: The Deep Mines of Norra (complete)** (theme 2): three required wall-jump shafts, loose-floor
+   haul bridge/catch tunnel, dripping water, ore, timber, five shades and three shade archers, two shrines,
+   optional big-potion chimney. Built by `build_level2.py`; `tests/routes/level2.seq` proves the exit.
+   Archers telegraph for 0.6 s, retreat and fire slow, parryable/reflected bolts; roll and jump also evade them.
+   Direct level starts grant earlier marks. Flow: 1 → Traversa card → 2 → Vitaria card → title.
+   Vitaria grants +1 max health now; implement its second-wind healing verb before level 3.
 3. **Level 3: The Rooftops of Dornis** (theme 3): long running jumps, festival lanterns, wind gusts, more shades
    in groups of two.
 4. **Level 4: The Walls of Valerion** (theme 4): slicer blades, timed portcullis runs, **Captain Vesh** boss
@@ -49,3 +53,16 @@ check `art/ledger-godot.json`; $0.71 spent, ~$0.29 left). Actors in use: `kael2`
 (hang/climb registered on the ledge surface, see `art2/build.py build_ledge`), `shade2` (faces left, see
 `meta.json` "faces"). Use `create-image-pro-flash` at 96×96 for characters (best results so far) and
 `animate-with-text-v3` for animations; ~$0.03 per animation. Never call PixelLab any other way.
+
+## Validation and export
+
+`tests/run.sh` imports, smokes every `levels/level*.txt` for 1,800 frames, replays every route, and runs
+focused mechanics integration checks, sequentially for low-memory machines. Every route must receive
+`completed`; timeout, death, malformed sequences and missing files fail with position and exit code 1.
+The new floor reset is connected to Kael's checkpoint respawn signal; no movement constants were changed.
+
+**Export preset:** `levels/*.txt` and `story/*.md` must be in the non-resource export include filter.
+Godot does not automatically include these text files merely because code reads them with FileAccess.
+
+Current sandbox validation: no accessible X11/Wayland display, so `--shot` could not be used; rendering
+and a human playtest of the new mine remain to be reviewed on a display-capable machine.

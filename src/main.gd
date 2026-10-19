@@ -2,7 +2,7 @@ extends Node
 ## Game flow: title → story card → level → card → next level. Also a pause menu and a screenshot mode:
 ##   godot --path . -- --level=1 --shot=/tmp/a.png --frames=90 [--at=x,y] [--hold=right,attack]
 
-const LEVELS := ["res://levels/level1.txt"]
+const LEVELS := ["res://levels/level1.txt", "res://levels/level2.txt"]
 ## Story card text lives in story/cards.md (## key, then the text) so the lore can be edited without code.
 var STORY := _load_cards("res://story/cards.md")
 
@@ -38,8 +38,14 @@ func _ready() -> void:
 		_args[kv[0]] = kv[1] if kv.size() > 1 else "1"
 	if _args.has("shot") or _args.has("smoke"):   # dev modes run in a window
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	if _args.has("level"):
-		_start_level(int(_args["level"]))
+	if _args.has("route"):
+		seed(1)
+		if _args.has("at") or _args.has("hold") or _args.has("seq"):
+			print("ROUTE FAIL route forbids at/hold/seq, player pos unavailable")
+			get_tree().quit(1)
+			return
+	if _args.has("level") or _args.has("route"):
+		_start_level(int(_args.get("level", "1")))
 	else:
 		_title()
 
@@ -151,8 +157,15 @@ func _unhandled_input(event: InputEvent) -> void:
 # --- levels --------------------------------------------------------------------------------------
 
 func _start_level(n: int) -> void:
+	if n < 1 or n > LEVELS.size():
+		print("ROUTE FAIL invalid level, player pos unavailable" if _args.has("route") else "Invalid level")
+		get_tree().quit(1)
+		return
 	_clear()
 	Game.level = n
+	# Direct starts have the same marks and health as arriving through earlier cards.
+	for i in range(n - 1):
+		_grant_mark(i)
 	var level := Level.load_file(LEVELS[n - 1])
 	level.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(level)
@@ -169,11 +182,17 @@ func _start_level(n: int) -> void:
 	_hud.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(_hud)
 	level.completed.connect(func():
-		var mark: String = ["traversa", "vitaria", "ascenda", "eterna", "enigma"][n - 1]
-		if mark not in Game.marks:
-			Game.marks.append(mark)
-		_card("after%d" % n if STORY.has("after%d" % n) else "after1", _title), CONNECT_ONE_SHOT)
-	if _args.has("shot"):
+		if _args.has("route"):
+			_route_completed = true
+			return
+		if _args.has("smoke") or _args.has("shot"):
+			return
+		_grant_mark(n - 1)
+		var next := func(): _start_level(n + 1)
+		_card("after%d" % n, next if n < LEVELS.size() else _title), CONNECT_ONE_SHOT)
+	if _args.has("route"):
+		_route(p)
+	elif _args.has("shot"):
 		_screenshot_mode(p)
 	elif _args.has("smoke"):
 		_smoke(p)
@@ -256,3 +275,67 @@ func _smoke(p: Player) -> void:
 			return
 	print("SMOKE OK frames=%d max_x=%d hp=%d state=%d" % [frames, max_x, p.hp, p.state])
 	get_tree().quit(0)
+
+
+func _grant_mark(index: int) -> void:
+	var mark: String = ["traversa", "vitaria", "ascenda", "eterna", "enigma"][index]
+	if mark not in Game.marks:
+		Game.marks.append(mark)
+		Game.max_hp += 1
+
+
+var _route_completed := false
+
+
+func _route_fail(reason: String, p: Player) -> void:
+	print("ROUTE FAIL %s, player pos %s hp=%d state=%d" % [reason, p.global_position, p.hp, p.state])
+	get_tree().quit(1)
+
+
+## Same frame+action / frame-action syntax as --seq; comments and blank lines are allowed.
+## No teleport, AI steering or health changes: only ordinary Input actions.
+func _route(p: Player) -> void:
+	var path: String = _args["route"]
+	if not FileAccess.file_exists(path):
+		_route_fail("missing sequence " + path, p)
+		return
+	var seq := {}
+	var last := 0
+	var re := RegEx.new()
+	re.compile("^([0-9]+)([+-])([a-z_]+)$")
+	for line in FileAccess.get_file_as_string(path).split("\n"):
+		line = line.get_slice("#", 0).strip_edges()
+		for step in line.split(",", false):
+			var m := re.search(step.strip_edges())
+			if not m or not Game.BINDINGS.has(m.get_string(3)):
+				_route_fail("invalid step " + step, p)
+				return
+			var frame := int(m.get_string(1))
+			if frame > 36000:
+				_route_fail("sequence exceeds 36000 frames", p)
+				return
+			last = maxi(last, frame)
+			seq[frame] = seq.get(frame, []) + [[m.get_string(2) == "+", m.get_string(3)]]
+	if seq.is_empty():
+		_route_fail("empty sequence", p)
+		return
+	for i in range(last + 181):
+		for ev in seq.get(i, []):
+			if ev[0]:
+				Input.action_press(ev[1])
+			else:
+				Input.action_release(ev[1])
+		await get_tree().physics_frame
+		if _args.has("trace") and i % maxi(1, int(_args["trace"])) == 0:
+			print("ROUTE frame=%d pos=%s velocity=%s hp=%d state=%d" % [i, p.position, p.velocity, p.hp, p.state])
+		if _route_completed:
+			print("ROUTE OK level=%d frames=%d hp=%d" % [Game.level, i + 1, p.hp])
+			get_tree().quit(0)
+			return
+		if not p.position.is_finite():
+			_route_fail("non-finite position", p)
+			return
+		if p.state == Player.S.DEAD:
+			_route_fail("Kael died", p)
+			return
+	_route_fail("sequence ended without completed signal", p)

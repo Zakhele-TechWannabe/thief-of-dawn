@@ -21,4 +21,13 @@ The vault opens onto the old mine road. A Thalorian scholar's note, pinned to th
 
 "He goes north, through Norra. Traversa guide you."
 
+## after2
+
+FATE MARK OF VITARIA
+Survival leaves its mark. Your maximum health grows by one.
+
+Out of the mines, the festival still roars in Dornis. Nobody knows.
+
+Shadows move on the rooftops: Tenebri shades in Morrow's service.
+
 TO BE CONTINUED

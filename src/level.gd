@@ -15,6 +15,7 @@ var height := 0
 var spawn := Vector2.ZERO
 var player: Player
 var camera: GameCamera
+var _loose := {}              # cell → resettable slab
 var _flickers: Array = []      # [PointLight2D, base_energy, phase]
 
 
@@ -56,7 +57,7 @@ func is_solid(c: int, r: int) -> bool:
 
 func is_floor(c: int, r: int) -> bool:
 	var ch := at(c, r)
-	return ch == SOLID or ch == PLATFORM
+	return ch == SOLID or ch == PLATFORM or (ch == "L" and _loose.has(Vector2i(c, r)) and _loose[Vector2i(c, r)].intact())
 
 
 func cell_of(p: Vector2) -> Vector2i:
@@ -279,8 +280,11 @@ func _build_objects() -> void:
 			match ch:
 				"@": spawn = feet
 				"s": _add_enemy("shade", feet)
+				"a": _add_enemy("archer", feet)
+				"L": _loose_floor(c, r)
+				"r", "o", "T": _mine_decor(ch, c, r)
 				"t": _torch(Vector2(c * T + 8, r * T + 8))
-				"L": _lantern(c, r)
+				"l": _lantern(c, r)
 				"w": _window(c, r)
 				"|": _pillar(c, r)
 				"^": _spikes(c, r)
@@ -546,7 +550,7 @@ func _hint_stone(feet: Vector2, text: String) -> void:
 
 
 func _add_enemy(kind: String, feet: Vector2) -> void:
-	var e := Shade.new()
+	var e: Shade = ShadeArcher.new() if kind == "archer" else Shade.new()
 	e.level = self
 	e.position = feet
 	add_child(e)
@@ -558,6 +562,9 @@ func add_player(p: Player) -> void:
 	p.position = spawn
 	p.checkpoint = spawn
 	add_child(p)
+	p.respawned.connect(func():
+		for slab in _loose.values():
+			slab.restore())
 	camera = GameCamera.new()
 	camera.target = p
 	camera.limit_left = 0
@@ -567,3 +574,70 @@ func add_player(p: Player) -> void:
 	add_child(camera)
 	camera.global_position = p.global_position
 	camera.reset_smoothing()
+
+
+func _loose_floor(c: int, r: int) -> void:
+	var slab := LooseFloor.new()
+	slab.level = self
+	slab.cell = Vector2i(c, r)
+	slab.position = Vector2(c * T, r * T)
+	_loose[slab.cell] = slab
+	add_child(slab)
+
+
+func _mine_decor(kind: String, c: int, r: int) -> void:
+	var node := Node2D.new()
+	node.position = Vector2(c * T + 8, r * T + 8)
+	node.z_index = -10
+	if kind == "T":
+		var bottom := r
+		while bottom < height - 1 and not is_floor(c, bottom + 1):
+			bottom += 1
+		var beam := Line2D.new()
+		beam.points = PackedVector2Array([Vector2(0, -8), Vector2(0, (bottom - r) * T + 8)])
+		beam.width = 6
+		beam.default_color = Color("#4e3529")
+		node.add_child(beam)
+		var brace := Line2D.new()
+		brace.points = PackedVector2Array([Vector2(-18, 8), Vector2(0, 26), Vector2(18, 8)])
+		brace.width = 4
+		brace.default_color = Color("#70503a")
+		node.add_child(brace)
+	elif kind == "r":
+		var drips := Fx.dust(Vector2(4, 0), 5, Color(0.4, 0.7, 1, 0.75))
+		drips.lifetime = 1.2
+		drips.preprocess = 1.2
+		drips.direction = Vector2.DOWN
+		drips.spread = 3
+		drips.gravity = Vector2(0, 90)
+		drips.initial_velocity_min = 15
+		drips.initial_velocity_max = 25
+		node.add_child(drips)
+		node.add_child(Fx.light(Color(0.35, 0.6, 1), 0.35, 50))
+	else:
+		# a few small crystals pressed into the neighbouring rock face (ceiling or wall), not floating in the air
+		var face := Vector2.ZERO
+		if is_solid(c, r - 1):
+			face = Vector2(0, -7)
+		elif is_solid(c - 1, r):
+			face = Vector2(-7, 0)
+		elif is_solid(c + 1, r):
+			face = Vector2(7, 0)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = c * 31 + r * 17
+		for i in rng.randi_range(2, 3):
+			var crystal := Polygon2D.new()
+			var h := rng.randf_range(2.0, 4.0)
+			crystal.polygon = PackedVector2Array([Vector2(0, -h), Vector2(1.5, 0), Vector2(0, 1), Vector2(-1.5, 0)])
+			crystal.position = face + Vector2(rng.randf_range(-4, 4), rng.randf_range(-2, 2))
+			crystal.rotation = face.angle() + PI / 2 + rng.randf_range(-0.5, 0.5) if face != Vector2.ZERO else 0.0
+			crystal.color = Color(0.45, 0.75, 0.85).lerp(Color(0.8, 0.95, 1.0), rng.randf())
+			node.add_child(crystal)
+		var light := Fx.light(Color(0.4, 0.75, 1), 0.35, 26)
+		light.position = face
+		node.add_child(light)
+		var tw := node.create_tween().set_loops()
+		tw.tween_interval(rng.randf_range(0.0, 2.0))
+		tw.tween_property(light, "energy", 0.08, 1.4)
+		tw.tween_property(light, "energy", 0.45, 0.6)
+	add_child(node)

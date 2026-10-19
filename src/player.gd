@@ -2,6 +2,8 @@ class_name Player
 extends CharacterBody2D
 ## Kael. Weighty-but-responsive movement, ledge grabs, a two-hit sword combo, dodge roll and parry.
 
+signal respawned
+
 enum S { MOVE, ATTACK, ROLL, BLOCK, HURT, HANG, CLIMB, DEAD }
 
 # Movement (pixels, seconds). Jump apex ≈ 5.5 tiles; running jump clears ≈ 7 tiles.
@@ -228,7 +230,7 @@ func _after_move() -> void:
 			Game.shake(2.0, 0.12)
 	if on_floor and state == S.MOVE:
 		var c := level.cell_of(global_position + Vector2(0, 2))
-		if level.is_floor(c.x, c.y) and level.at(c.x - 1, c.y - 1) != "^" and level.at(c.x + 1, c.y - 1) != "^":
+		if level.is_floor(c.x, c.y) and level.at(c.x, c.y) != "L" and level.at(c.x - 1, c.y - 1) != "^" and level.at(c.x + 1, c.y - 1) != "^":
 			safe_pos = global_position
 	_was_on_floor = on_floor
 
@@ -467,7 +469,9 @@ func _dead(delta: float) -> void:
 	if _state_time > 1.8:
 		hp = Game.max_hp
 		Game.player_health_changed.emit(hp, Game.max_hp)
+		respawned.emit()
 		global_position = checkpoint
+		safe_pos = checkpoint
 		velocity = Vector2.ZERO
 		_invuln = 1.0
 		_enter(S.MOVE)

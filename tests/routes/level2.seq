@@ -1,0 +1,47 @@
+# Lamp room and shaft I: ground jump, then wall jump and ledge climb.
+0+move_right
+130+jump
+160-jump
+165+jump
+200-jump
+210+jump
+245-jump
+250+jump
+285-jump
+290+jump
+325-jump
+# Ore gallery: jump the shade and roll past the archer.
+350+jump
+390-jump
+405+dodge
+406-dodge
+# Shaft II.
+500+jump
+530-jump
+535+jump
+570-jump
+# High haul bridge: keep moving as the loose floor gives way.
+630+jump
+670-jump
+720+jump
+760-jump
+# Sump tunnel, after the wet drop and second shrine.
+995+dodge
+996-dodge
+1035+dodge
+1036-dodge
+1075+dodge
+1076-dodge
+# Shaft III.
+1150+jump
+1180-jump
+1185+jump
+1220-jump
+# Final timber gallery and exit.
+1300+jump
+1340-jump
+1380+dodge
+1381-dodge
+1402-move_right
+1410+up
+1411-up
