@@ -1,0 +1,91 @@
+extends Node
+## Global state and services: input map, run progress, hit-stop and camera shake.
+
+signal shake_requested(strength: float, duration: float)
+signal player_health_changed(hp: int, max_hp: int)
+signal toast(text: String)
+
+const TILE := 16
+
+# Keys shown in the always-on controls bar come from here, so the bar never lies about the bindings.
+const BINDINGS := {
+	"move_left": [KEY_LEFT, KEY_A],
+	"move_right": [KEY_RIGHT, KEY_D],
+	"up": [KEY_UP, KEY_W],
+	"down": [KEY_DOWN, KEY_S],
+	"jump": [KEY_SPACE, KEY_Z],
+	"attack": [KEY_X, KEY_J],
+	"dodge": [KEY_C, KEY_L, KEY_SHIFT],
+	"parry": [KEY_V, KEY_K],
+	"pause": [KEY_ESCAPE, KEY_P],
+}
+const PAD := {
+	"jump": JOY_BUTTON_A, "attack": JOY_BUTTON_X, "dodge": JOY_BUTTON_B, "parry": JOY_BUTTON_RIGHT_SHOULDER,
+	"pause": JOY_BUTTON_START, "move_left": JOY_BUTTON_DPAD_LEFT, "move_right": JOY_BUTTON_DPAD_RIGHT,
+	"up": JOY_BUTTON_DPAD_UP, "down": JOY_BUTTON_DPAD_DOWN,
+}
+
+var max_hp := 5
+var level := 1
+var marks: Array[String] = []          # FATE marks earned; each one grants an ability (see ABILITIES)
+const ABILITIES := {"traversa": "wall_jump", "ascenda": "double_jump", "enigma": "shadow_dash"}
+
+var _hitstop_left := 0.0
+
+## Pixel fonts drawn without antialiasing, so text stays as crisp as the art.
+var ui_font: FontFile = _pixel_font("res://assets/fonts/Silkscreen-Regular.ttf")
+var title_font: FontFile = _pixel_font("res://assets/fonts/PixelifySans.ttf")
+
+
+static func _pixel_font(path: String) -> FontFile:
+	var f: FontFile = load(path)
+	f.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+	f.hinting = TextServer.HINTING_NONE
+	f.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+	return f
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	for action in BINDINGS:
+		if not InputMap.has_action(action):
+			InputMap.add_action(action, 0.3)
+		for key in BINDINGS[action]:
+			var ev := InputEventKey.new()
+			ev.physical_keycode = key
+			InputMap.action_add_event(action, ev)
+		if PAD.has(action):
+			var pad := InputEventJoypadButton.new()
+			pad.button_index = PAD[action]
+			InputMap.action_add_event(action, pad)
+	for pair in [["move_left", JOY_AXIS_LEFT_X, -1.0], ["move_right", JOY_AXIS_LEFT_X, 1.0],
+			["up", JOY_AXIS_LEFT_Y, -1.0], ["down", JOY_AXIS_LEFT_Y, 1.0]]:
+		var axis := InputEventJoypadMotion.new()
+		axis.axis = pair[1]
+		axis.axis_value = pair[2]
+		InputMap.action_add_event(pair[0], axis)
+
+
+func has_ability(ability: String) -> bool:
+	for mark in marks:
+		if ABILITIES.get(mark, "") == ability:
+			return true
+	return false
+
+
+## Freeze the world for a few frames so hits land with weight.
+func hitstop(seconds: float, scale := 0.05) -> void:
+	_hitstop_left = maxf(_hitstop_left, seconds)
+	Engine.time_scale = scale
+
+
+func shake(strength: float, duration := 0.2) -> void:
+	shake_requested.emit(strength, duration)
+
+
+func _process(delta: float) -> void:
+	if _hitstop_left > 0.0:
+		# delta is already scaled; measure real time instead
+		_hitstop_left -= delta / maxf(Engine.time_scale, 0.0001)
+		if _hitstop_left <= 0.0:
+			Engine.time_scale = 1.0

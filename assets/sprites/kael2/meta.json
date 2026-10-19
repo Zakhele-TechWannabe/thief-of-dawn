@@ -1,0 +1,28 @@
+{
+  "frame_size": [
+    96,
+    96
+  ],
+  "anchor": [
+    48,
+    82
+  ],
+  "anims": {
+    "idle": {
+      "fps": 6,
+      "loop": true
+    },
+    "run": {
+      "fps": 12,
+      "loop": true
+    },
+    "jump": {
+      "fps": 12,
+      "loop": false
+    },
+    "fall": {
+      "fps": 8,
+      "loop": true
+    }
+  }
+}

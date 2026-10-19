@@ -17,7 +17,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-LEDGER = ROOT / "art" / "ledger.json"
+LEDGER = ROOT / "art" / os.environ.get("PIXELLAB_LEDGER", "ledger.json")  # one ledger per budget
 API = "https://api.pixellab.ai/v2"
 CAP_USD = 1.00
 

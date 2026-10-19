@@ -1,0 +1,90 @@
+{
+  "cap_usd": 1.0,
+  "baseline_usd": 3.42495658810271,
+  "calls": [
+    {
+      "time": "2026-10-19T11:57:40",
+      "endpoint": "create-image-bitforge",
+      "note": "kael_base_s11",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.0
+    },
+    {
+      "time": "2026-10-19T11:58:17",
+      "endpoint": "create-image-bitforge",
+      "note": "kael_base_s22",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.01277
+    },
+    {
+      "time": "2026-10-19T11:58:43",
+      "endpoint": "create-image-bitforge",
+      "note": "kael_base_s33",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.02361
+    },
+    {
+      "time": "2026-10-19T11:59:29",
+      "endpoint": "create-image-pixflux",
+      "note": "kael_px_s5",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.03223
+    },
+    {
+      "time": "2026-10-19T12:00:09",
+      "endpoint": "create-image-pixflux",
+      "note": "kael_px_s6",
+      "cost_usd": 0.0,
+      "spent_total_usd": 0.03952
+    },
+    {
+      "time": "2026-10-19T12:00:46",
+      "endpoint": "create-image-pro-flash",
+      "note": "kael_flash",
+      "cost_usd": 0.02401,
+      "spent_total_usd": 0.07124
+    },
+    {
+      "time": "2026-10-19T12:04:05",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_idle",
+      "cost_usd": 0.0331,
+      "spent_total_usd": 0.10434
+    },
+    {
+      "time": "2026-10-19T12:06:17",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_run",
+      "cost_usd": 0.02898,
+      "spent_total_usd": 0.13332
+    },
+    {
+      "time": "2026-10-19T12:08:49",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_jump",
+      "cost_usd": 0.03107,
+      "spent_total_usd": 0.16439
+    },
+    {
+      "time": "2026-10-19T12:10:32",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_fall",
+      "cost_usd": 0.0245,
+      "spent_total_usd": 0.18889
+    },
+    {
+      "time": "2026-10-19T12:13:27",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_attack1",
+      "cost_usd": 0.08585,
+      "spent_total_usd": 0.27474
+    },
+    {
+      "time": "2026-10-19T12:15:16",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_attack2",
+      "cost_usd": 0.02636,
+      "spent_total_usd": 0.3011
+    }
+  ]
+}

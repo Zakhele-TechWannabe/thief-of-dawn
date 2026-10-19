@@ -4,3 +4,6 @@ __pycache__/
 .env
 art/raw/
 screens/
+.godot/
+art2/raw/*.json
+art2/raw/*.log
