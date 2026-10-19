@@ -55,6 +55,7 @@ var _fall_peak := 0.0
 
 var sprite: AnimatedSprite2D
 var actor := "kael2"
+var _ledge_sprite: AnimatedSprite2D
 var _hitbox: Area2D
 var _light: PointLight2D
 
@@ -75,6 +76,13 @@ func _ready() -> void:
 	actor = "kael2" if FileAccess.file_exists("res://assets/sprites/kael2/meta.json") else "kael"
 	sprite = Sprites.make(actor)
 	add_child(sprite)
+	# hang/climb art is registered on the ledge surface and drawn behind the tiles, so the ledge tile itself
+	# covers the hands-and-chest band where the generated stone was removed
+	if FileAccess.file_exists("res://assets/sprites/kael2_ledge/meta.json"):
+		_ledge_sprite = Sprites.make("kael2_ledge")
+		_ledge_sprite.z_index = -1
+		_ledge_sprite.visible = false
+		add_child(_ledge_sprite)
 
 	_hitbox = Area2D.new()
 	_hitbox.collision_layer = 0
@@ -121,7 +129,8 @@ func _physics_process(delta: float) -> void:
 	riposte = maxf(0.0, riposte - delta)
 	_buffer = BUFFER if Input.is_action_just_pressed("jump") else maxf(0.0, _buffer - delta)
 	_attack_buffer = 0.15 if Input.is_action_just_pressed("attack") else maxf(0.0, _attack_buffer - delta)
-	sprite.visible = _invuln <= 0.0 or state == S.HURT or int(_invuln * 20) % 2 == 0
+	if state != S.HANG and state != S.CLIMB:
+		sprite.visible = _invuln <= 0.0 or state == S.HURT or int(_invuln * 20) % 2 == 0
 
 	match state:
 		S.MOVE: _move(delta)
@@ -243,7 +252,7 @@ func _try_ledge() -> bool:
 				global_position = Vector2(_ledge.x - facing * 8.0, top_y + 46.0)
 				velocity = Vector2.ZERO
 				_enter(S.HANG)
-				Sprites.play(sprite, "hang", ["fall"])
+				_show_ledge_sprite("hang")
 				return true
 	return false
 
@@ -253,21 +262,52 @@ func _hang(_delta: float) -> void:
 		return
 	if Input.is_action_just_pressed("jump") or Input.is_action_pressed("up") or (_axis() == facing and _state_time > 0.25):
 		_enter(S.CLIMB)
-		Sprites.play(sprite, "climb", ["jump"])
+		_show_ledge_sprite("climb")
 	elif Input.is_action_just_pressed("down") or _axis() == -facing:
 		_enter(S.MOVE)
+		_show_ledge_sprite("")
 		global_position.x -= facing * 3.0
 
 
 func _climb(_delta: float) -> void:
-	# lift the body up and over the edge during the animation
-	var t := clampf(_state_time / 0.35, 0.0, 1.0)
-	var start := Vector2(_ledge.x - facing * 8.0, _ledge.y + 46.0)
-	var finish := Vector2(_ledge.x + facing * 10.0, _ledge.y)
-	global_position = Vector2(lerpf(start.x, finish.x, maxf(0.0, t * 2.0 - 1.0)), lerpf(start.y, finish.y, minf(1.0, t * 1.6)))
+	# the art does the lifting; the body stays put until the last frames, then eases onto the ledge
+	var dur := 0.5
+	var t := clampf(_state_time / dur, 0.0, 1.0)
+	if _ledge_sprite:
+		_place_ledge_sprite()
+	if _ledge_sprite == null:
+		global_position.y = lerpf(_ledge.y + 46.0, _ledge.y, t)
 	if t >= 1.0:
+		global_position = Vector2(_ledge.x + facing * 10.0, _ledge.y)
 		velocity = Vector2.ZERO
+		_show_ledge_sprite("")
 		_enter(S.MOVE)
+
+
+## Swap between the normal sprite and the ledge-registered one ("" = back to normal).
+func _show_ledge_sprite(anim: String) -> void:
+	if _ledge_sprite == null:
+		Sprites.play(sprite, "hang" if anim == "hang" else "jump", ["fall"])
+		return
+	_ledge_sprite.visible = anim != ""
+	sprite.visible = anim == ""
+	if anim != "":
+		Sprites.face(_ledge_sprite, "kael2_ledge", facing)
+		_ledge_sprite.stop()
+		Sprites.play(_ledge_sprite, anim)
+		_place_ledge_sprite()
+
+
+## The ledge art is drawn front-on: the hanging body must sit just outside the wall face (12 px from the corner),
+## then slide onto the ledge over the climb's second half. Origin = ledge surface; ours = feet, 46 px lower.
+func _place_ledge_sprite() -> void:
+	var from_corner := -12.0
+	if state == S.CLIMB and _ledge_sprite.sprite_frames:
+		var n := _ledge_sprite.sprite_frames.get_frame_count("climb")
+		var k := clampf((_ledge_sprite.frame - 2.0) / maxf(1.0, n - 3.0), 0.0, 1.0)
+		from_corner = lerpf(-12.0, 12.0, k)
+	var corner_rel := _ledge.x - global_position.x
+	_ledge_sprite.position = Vector2(corner_rel + facing * from_corner, -46.0)
 
 
 # --- combat --------------------------------------------------------------------------------------

@@ -103,3 +103,83 @@ if __name__ == "__main__":
         for prefix in ("kael_hangidle", "kael_climbup"):
             for f in sorted(RAW.glob(f"{prefix}_[0-9][0-9].png")):
                 strip_ledge(f, RAW / f.name.replace(prefix, prefix + "_clean"))
+
+
+def _ledge_row(im):
+    """Top row of the grey stone band (the ledge surface) in a hang/climb frame."""
+    px = im.load()
+    best, best_n = None, 0
+    for y in range(im.height):
+        n = 0
+        for x in range(im.width):
+            r, g, b, a = px[x, y]
+            if a and max(r, g, b) - min(r, g, b) < 28 and max(r, g, b) > 60:
+                n += 1
+        if n >= 18 and best is None:
+            best = y
+        best_n = max(best_n, n)
+    return best
+
+
+def _drop_specks(im, min_size=12):
+    """Remove small disconnected blobs (stone/vine leftovers)."""
+    px = im.load()
+    seen = set()
+    for y0 in range(im.height):
+        for x0 in range(im.width):
+            if (x0, y0) in seen or not px[x0, y0][3]:
+                continue
+            comp, stack = [], [(x0, y0)]
+            seen.add((x0, y0))
+            while stack:
+                x, y = stack.pop()
+                comp.append((x, y))
+                for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= nx < im.width and 0 <= ny < im.height and (nx, ny) not in seen and px[nx, ny][3]:
+                        seen.add((nx, ny))
+                        stack.append((nx, ny))
+            if len(comp) < min_size:
+                for x, y in comp:
+                    px[x, y] = (0, 0, 0, 0)
+
+
+def build_ledge():
+    """Hang + climb frames re-registered on the ledge: canvas 96x192, ledge surface at y=96, stone removed."""
+    out = OUT.parent / "kael2_ledge"
+    meta = {"frame_size": [96, 192], "anchor": [48, 96], "faces": "right",
+            "anims": {"hang": {"fps": 5, "loop": True}, "climb": {"fps": 14, "loop": False}}}
+    for anim, prefix in (("hang", "kael_hangidle"), ("climb", "kael_climbup")):
+        d = out / anim
+        d.mkdir(parents=True, exist_ok=True)
+        for old in d.glob("*.png"):
+            old.unlink()
+        frames = sorted(RAW.glob(f"{prefix}_[0-9][0-9].png"))
+        if anim == "hang":
+            frames = frames[1:]
+        for i, f in enumerate(frames):
+            im = clean(Image.open(f))
+            top = _ledge_row(im)
+            if top is None:
+                top = 4
+            px = im.load()
+            for y in range(max(0, top - 3), min(im.height, top + 12)):
+                for x in range(im.width):
+                    r, g, b, a = px[x, y]
+                    if not a:
+                        continue
+                    lowsat = max(r, g, b) - min(r, g, b) < 30
+                    vine = g > r + 10 and g > b + 10 and max(r, g, b) < 120
+                    if lowsat or vine:
+                        px[x, y] = (0, 0, 0, 0)
+            _drop_specks(im)
+            canvas = Image.new("RGBA", (96, 192), (0, 0, 0, 0))
+            canvas.alpha_composite(im, (0, 96 - top))
+            canvas.save(d / f"{i:02}.png")
+        print("ledge", anim, len(frames))
+    (out / "meta.json").write_text(json.dumps(meta, indent=2))
+
+
+if __name__ == "__main__":
+    import sys
+    if "ledge" in sys.argv:
+        build_ledge()

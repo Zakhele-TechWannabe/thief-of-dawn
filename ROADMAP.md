@@ -45,5 +45,7 @@ Grant the Mark on the level-complete card with a short reveal and a one-line exp
 ## Art budget
 
 PixelLab via `tools/pixellab.py` with `PIXELLAB_LEDGER=ledger-godot.json` (hard cap $1.00 for this phase;
-check `art/ledger-godot.json`). Use `create-image-pro-flash` at 96×96 for characters (best results so far) and
+check `art/ledger-godot.json`; $0.71 spent, ~$0.29 left). Actors in use: `kael2` (96 px), `kael2_ledge`
+(hang/climb registered on the ledge surface, see `art2/build.py build_ledge`), `shade2` (faces left, see
+`meta.json` "faces"). Use `create-image-pro-flash` at 96×96 for characters (best results so far) and
 `animate-with-text-v3` for animations; ~$0.03 per animation. Never call PixelLab any other way.
