@@ -3,8 +3,8 @@ extends CanvasLayer
 ## Health, location name, short messages, and a controls bar that is always on screen.
 
 const CONTROLS := [
-	["ARROWS", "Move"], ["SPACE", "Jump"], ["X", "Attack"], ["C", "Dodge"], ["V", "Parry"], ["UP", "Climb/Enter"],
-	["DOWN+SPACE", "Drop"],
+	["ARROWS", "Move"], ["UP/SPACE", "Jump/Climb"], ["X", "Attack"], ["C", "Dodge"], ["V", "Parry"],
+	["DOWN+JUMP", "Drop"], ["F11", "Window"],
 ]
 
 var area_name := ""

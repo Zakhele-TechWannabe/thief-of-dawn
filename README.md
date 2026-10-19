@@ -17,9 +17,9 @@ The pygame prototype that came before lives in `prototype-pygame/` (reference on
 
 ## Controls (always shown on screen)
 
-Arrows/WASD move · Space/Z jump · X/J attack (press again for the second hit) · C/L/Shift dodge-roll ·
+Arrows/WASD move · Up/W/Space/Z jump · X/J attack (press again for the second hit) · C/L/Shift dodge-roll ·
 V/K parry (block; the first 0.2 s deflects and staggers the attacker, and your next hit is a critical) ·
-Up climb from a ledge / enter a door · Down+Space drop through a plank · Esc pause. Gamepad works too.
+Up climbs from a ledge and enters doors · Down+Jump drops through a plank · F11 fullscreen/window · Esc pause. Starts fullscreen. Gamepad works too.
 
 ## Layout
 

@@ -3,10 +3,26 @@ extends Node
 ##   godot --path . -- --level=1 --shot=/tmp/a.png --frames=90 [--at=x,y] [--hold=right,attack]
 
 const LEVELS := ["res://levels/level1.txt"]
-const STORY := {
-	"intro": "The Grand Festival. Music in Dornis, lanterns over Thalor. Then the Library goes dark.\n\nMorrow the Hollow, keeper of the Council's records, walks out with the Lantern of Eterna, and with Sarai of Sarath. \"At dawn,\" he says, \"the past forgets itself.\"\n\nThe vault door seals behind him. You are on the wrong side of it.",
-	"after1": "FATE MARK OF TRAVERSA\nYou can now leap off walls: jump while sliding against one.\n\nThe vault opens onto the old mine road. A Thalorian scholar's note, pinned to the stone:\n\n\"He goes north, through Norra. Traversa guide you.\"\n\nTO BE CONTINUED",
-}
+## Story card text lives in story/cards.md (## key, then the text) so the lore can be edited without code.
+var STORY := _load_cards("res://story/cards.md")
+
+
+static func _load_cards(path: String) -> Dictionary:
+	var cards := {}
+	var key := ""
+	var lines: PackedStringArray = []
+	for line in FileAccess.get_file_as_string(path).split("\n"):
+		if line.begins_with("## "):
+			if key != "":
+				cards[key] = "\n".join(lines).strip_edges()
+			key = line.substr(3).strip_edges()
+			lines = []
+		elif key != "":
+			lines.append(line)
+	if key != "":
+		cards[key] = "\n".join(lines).strip_edges()
+	return cards
+
 
 var _args := {}
 var _current: Node
@@ -20,6 +36,8 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		var kv := a.trim_prefix("--").split("=")
 		_args[kv[0]] = kv[1] if kv.size() > 1 else "1"
+	if _args.has("shot") or _args.has("smoke"):   # dev modes run in a window
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	if _args.has("level"):
 		_start_level(int(_args["level"]))
 	else:
@@ -154,7 +172,7 @@ func _start_level(n: int) -> void:
 		var mark: String = ["traversa", "vitaria", "ascenda", "eterna", "enigma"][n - 1]
 		if mark not in Game.marks:
 			Game.marks.append(mark)
-		_card("after%d" % n, _title), CONNECT_ONE_SHOT)
+		_card("after%d" % n if STORY.has("after%d" % n) else "after1", _title), CONNECT_ONE_SHOT)
 	if _args.has("shot"):
 		_screenshot_mode(p)
 	elif _args.has("smoke"):

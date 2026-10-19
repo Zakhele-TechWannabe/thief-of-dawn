@@ -13,11 +13,12 @@ const BINDINGS := {
 	"move_right": [KEY_RIGHT, KEY_D],
 	"up": [KEY_UP, KEY_W],
 	"down": [KEY_DOWN, KEY_S],
-	"jump": [KEY_SPACE, KEY_Z],
+	"jump": [KEY_SPACE, KEY_Z, KEY_UP, KEY_W],
 	"attack": [KEY_X, KEY_J],
 	"dodge": [KEY_C, KEY_L, KEY_SHIFT],
 	"parry": [KEY_V, KEY_K],
 	"pause": [KEY_ESCAPE, KEY_P],
+	"fullscreen": [KEY_F11],
 }
 const PAD := {
 	"jump": JOY_BUTTON_A, "attack": JOY_BUTTON_X, "dodge": JOY_BUTTON_B, "parry": JOY_BUTTON_RIGHT_SHOULDER,
@@ -64,6 +65,12 @@ func _ready() -> void:
 		axis.axis = pair[1]
 		axis.axis_value = pair[2]
 		InputMap.action_add_event(pair[0], axis)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("fullscreen"):
+		var full := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if full else DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 
 func has_ability(ability: String) -> bool:
