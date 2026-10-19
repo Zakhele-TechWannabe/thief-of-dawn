@@ -23,6 +23,38 @@
     "fall": {
       "fps": 8,
       "loop": true
+    },
+    "attack1": {
+      "fps": 18,
+      "loop": false
+    },
+    "attack2": {
+      "fps": 16,
+      "loop": false
+    },
+    "roll": {
+      "fps": 16,
+      "loop": false
+    },
+    "block": {
+      "fps": 12,
+      "loop": false
+    },
+    "hurt": {
+      "fps": 12,
+      "loop": false
+    },
+    "death": {
+      "fps": 8,
+      "loop": false
+    },
+    "hang": {
+      "fps": 6,
+      "loop": true
+    },
+    "climb": {
+      "fps": 12,
+      "loop": false
     }
   }
 }

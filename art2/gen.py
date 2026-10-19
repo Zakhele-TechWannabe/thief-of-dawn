@@ -113,3 +113,27 @@ if __name__ == "__main__" and sys.argv[1] == "shade_anims":
         except Exception as err:
             print("FAILED", name, str(err)[:300], flush=True)
     print(f"total spent ${spent():.4f}")
+
+if __name__ == "__main__" and sys.argv[1] == "hang_base":
+    ref = {"image": {"type": "base64", "base64": base64.b64encode((RAW / "kael_flash_00.png").read_bytes()).decode()}, "size": {"width": 96, "height": 96}}
+    for seed in (21, 22):
+        request(f"kael_hangbase_s{seed}", "create-image-pro-flash", {
+            "description": ("Side-scroller game sprite, side view facing right: the same young green-skinned swordsman "
+                            "(black ponytail, dark green tunic, ochre sash, brown bracers and boots) HANGING from a stone "
+                            "ledge: both arms stretched straight up gripping the ledge edge at the top of the image, body "
+                            "dangling straight down below the hands, legs hanging, curved sword sheathed at his hip. "
+                            "Hands at the very top centre, feet near the bottom."),
+            "image_size": {"width": 96, "height": 96}, "no_background": True, "seed": seed,
+            "style_image": ref, "style_options": {"color_palette": True, "outline": True, "detail": True, "shading": True}}, 0.06)
+    print(f"total spent ${spent():.4f}")
+
+if __name__ == "__main__" and sys.argv[1] == "climb":
+    base = {"type": "base64", "base64": base64.b64encode((RAW / "kael_hangbase_s22_00.png").read_bytes()).decode()}
+    request("kael_climbup", "animate-with-text-v3", {"first_frame": base, "action": (
+        "pulls himself up with both arms, swings a knee over the stone ledge and climbs on top of it, ending crouched "
+        "on top of the ledge. Keep exactly the same character, outfit and scale; no camera movement, no background."),
+        "frame_count": 6, "no_background": True}, 0.04)
+    request("kael_hangidle", "animate-with-text-v3", {"first_frame": base, "action": (
+        "hangs from the ledge by both hands, body swaying very slightly, legs dangling. Keep exactly the same "
+        "character, outfit and scale; no camera movement, no background."), "frame_count": 4, "no_background": True}, 0.04)
+    print(f"total spent ${spent():.4f}")

@@ -361,6 +361,12 @@ func _roll(delta: float) -> void:
 func _block(_delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, 20.0)
 	_gravity(_delta)
+	if _attack_buffer > 0.0:            # counter straight out of a block (a riposte after a parry)
+		_start_attack(0)
+		return
+	if Input.is_action_just_pressed("dodge"):
+		_start_roll()
+		return
 	if not Input.is_action_pressed("parry") and _state_time > 0.25:
 		_enter(S.MOVE)
 

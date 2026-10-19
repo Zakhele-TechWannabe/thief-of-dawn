@@ -85,6 +85,62 @@
       "note": "kael_attack2",
       "cost_usd": 0.02636,
       "spent_total_usd": 0.3011
+    },
+    {
+      "time": "2026-10-19T12:17:04",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_roll",
+      "cost_usd": 0.02582,
+      "spent_total_usd": 0.32692
+    },
+    {
+      "time": "2026-10-19T12:19:10",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_block",
+      "cost_usd": 0.02713,
+      "spent_total_usd": 0.35405
+    },
+    {
+      "time": "2026-10-19T12:20:35",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_hurt",
+      "cost_usd": 0.02076,
+      "spent_total_usd": 0.37481
+    },
+    {
+      "time": "2026-10-19T12:22:40",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_death",
+      "cost_usd": 0.02602,
+      "spent_total_usd": 0.40083
+    },
+    {
+      "time": "2026-10-19T12:24:12",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_hang",
+      "cost_usd": 0.02272,
+      "spent_total_usd": 0.42355
+    },
+    {
+      "time": "2026-10-19T12:25:40",
+      "endpoint": "animate-with-text-v3",
+      "note": "kael_climb",
+      "cost_usd": 0.02177,
+      "spent_total_usd": 0.44532
+    },
+    {
+      "time": "2026-10-19T12:27:19",
+      "endpoint": "create-image-pro-flash",
+      "note": "kael_hangbase_s21",
+      "cost_usd": 0.0242,
+      "spent_total_usd": 0.46952
+    },
+    {
+      "time": "2026-10-19T12:27:51",
+      "endpoint": "create-image-pro-flash",
+      "note": "kael_hangbase_s22",
+      "cost_usd": 0.02395,
+      "spent_total_usd": 0.49347
     }
   ]
 }
