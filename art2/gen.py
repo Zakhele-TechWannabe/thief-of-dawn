@@ -137,3 +137,35 @@ if __name__ == "__main__" and sys.argv[1] == "climb":
         "hangs from the ledge by both hands, body swaying very slightly, legs dangling. Keep exactly the same "
         "character, outfit and scale; no camera movement, no background."), "frame_count": 4, "no_background": True}, 0.04)
     print(f"total spent ${spent():.4f}")
+
+RENN = ("15-year-old Norran boy, thief: slate-blue skin, messy metallic-bronze hair, dark onyx eyes, short and wiry, "
+        "scraped knuckles, worn grey-brown hand-me-down tunic with rolled sleeves, patched trousers, cloth wraps on "
+        "his feet, a small rope coil at his belt, no weapon, empty hands, alert crouched-ready stance, full body, "
+        "side view facing right")
+RENN_KEEP = (" Keep exactly the same boy, outfit, colours and scale; side view facing right the whole time; empty hands, "
+             "no weapon; no camera movement, no background, no effects.")
+RENN_ANIMS = [
+    ("idle", "standing loosely, shifting weight, glancing around nervously", 4),
+    ("run", "running fast to the right, full running cycle, arms pumping", 8),
+    ("jump", "crouches then leaps upward, knees tucked, rising through the air", 6),
+    ("sneak", "sneaking forward in a low crouch, careful quiet steps", 6),
+    ("slide", "drops into a fast low slide along the ground feet first, then gets back up", 6),
+    ("shove", "shoves forward hard with both hands to push someone away, then steps back", 4),
+    ("throw", "throws a small pebble forward overarm, then recovers", 4),
+]
+
+if __name__ == "__main__" and sys.argv[1] == "renn":
+    request("renn_flash", "create-image-pro-flash", {
+        "description": "Side-scroller game sprite, " + RENN + ". Clean readable silhouette, about 62 px tall, feet at the bottom.",
+        "image_size": {"width": 96, "height": 96}, "no_background": True, "seed": 15}, 0.06)
+    print(f"base done; total spent ${spent():.4f}", flush=True)
+
+if __name__ == "__main__" and sys.argv[1] == "renn_anims":
+    base = {"type": "base64", "base64": base64.b64encode((RAW / "renn_flash_00.png").read_bytes()).decode()}
+    for name, action, n in RENN_ANIMS:
+        try:
+            request("renn_" + name, "animate-with-text-v3", {"first_frame": base, "action": action + "." + RENN_KEEP,
+                    "frame_count": n, "no_background": True}, 0.04)
+        except Exception as err:
+            print("FAILED", name, str(err)[:300], flush=True)
+    print(f"total spent ${spent():.4f}")

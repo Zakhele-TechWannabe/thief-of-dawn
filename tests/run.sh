@@ -37,4 +37,9 @@ for route in tests/routes/*.seq; do
     run_check 'ROUTE OK' --headless --fixed-fps 60 --path . -- --level="$number" --route="$route"
 done
 run_check 'MECHANICS OK' --headless --fixed-fps 60 --path . tests/mechanics.tscn
+run_check 'SMOKE OK' --headless --fixed-fps 60 --path . -- --slice --smoke=1800
+for route in tests/slice_routes/*.seq; do
+    run_check 'ROUTE OK' --headless --fixed-fps 60 --path . -- --slice --route="$route"
+done
+run_check 'MECHANICS OK' --headless --fixed-fps 60 --path . tests/slice_mechanics.tscn
 printf 'ALL TESTS OK\n'

@@ -197,6 +197,62 @@
       "note": "kael_hangidle",
       "cost_usd": 0.03011,
       "spent_total_usd": 0.70884
+    },
+    {
+      "time": "2026-10-20T09:27:40",
+      "endpoint": "create-image-pro-flash",
+      "note": "renn_flash",
+      "cost_usd": 0.02418,
+      "spent_total_usd": 0.73302
+    },
+    {
+      "time": "2026-10-20T09:29:18",
+      "endpoint": "animate-with-text-v3",
+      "note": "renn_idle",
+      "cost_usd": 0.01961,
+      "spent_total_usd": 0.75263
+    },
+    {
+      "time": "2026-10-20T09:31:50",
+      "endpoint": "animate-with-text-v3",
+      "note": "renn_run",
+      "cost_usd": 0.02806,
+      "spent_total_usd": 0.78068
+    },
+    {
+      "time": "2026-10-20T09:33:24",
+      "endpoint": "animate-with-text-v3",
+      "note": "renn_jump",
+      "cost_usd": 0.02131,
+      "spent_total_usd": 0.802
+    },
+    {
+      "time": "2026-10-20T09:35:09",
+      "endpoint": "animate-with-text-v3",
+      "note": "renn_sneak",
+      "cost_usd": 0.02373,
+      "spent_total_usd": 0.82573
+    },
+    {
+      "time": "2026-10-20T09:38:03",
+      "endpoint": "animate-with-text-v3",
+      "note": "renn_slide",
+      "cost_usd": 0.03276,
+      "spent_total_usd": 0.85849
+    },
+    {
+      "time": "2026-10-20T09:40:32",
+      "endpoint": "animate-with-text-v3",
+      "note": "renn_shove",
+      "cost_usd": 0.03314,
+      "spent_total_usd": 0.89162
+    },
+    {
+      "time": "2026-10-20T09:42:01",
+      "endpoint": "animate-with-text-v3",
+      "note": "renn_throw",
+      "cost_usd": 0.02177,
+      "spent_total_usd": 0.9134
     }
   ]
 }

@@ -1,11 +1,14 @@
 # Thief of Dawn
 
-An action platformer set in the owner's **Umbraverse** (lore in Google Drive; story in `STORY.md`). Godot 4.7.
-Movement has Prince of Persia's weight and ledge-climbing; combat is fast and readable (combo, dodge roll,
-parry); each FATE Mark earned unlocks an ability that opens new routes.
+A narrative thief platformer set in the owner's **Umbraverse**. Godot 4.7.
+The first menu option is **Chapter I — The Boy (playable slice)**: Renn, fifteen,
+Slateford, Year 320. **Prototype levels** preserves the separate Kael levels 1–2,
+including their sword combat and FATE abilities. Those are technical prototypes,
+not Renn's story.
 
 ```sh
-godot --path .                                   # play: title → intro → vaults → card → mines → card → title
+godot --path .                                   # Chapter I / Prototype levels menu
+godot --path . -- --slice                        # directly start Renn’s slice
 godot -e --path .                                # editor
 godot --headless --path . --import               # (re)import assets after adding files
 godot --headless --path . -- --level=1 --smoke=1800          # headless random-input test, prints SMOKE OK
@@ -17,7 +20,53 @@ godot --path . -- --level=1 --shot=/tmp/a.png --frames=90 \
 
 The pygame prototype that came before lives in `prototype-pygame/` (reference only).
 
-## Controls (always shown on screen)
+## Chapter I slice
+
+Escape the holding cell through the climbing vent or the low drain, cross the watch
+walk/yard, shove Hadrik at the railing, then get over the lower workshop roofs. The
+opening exchange establishes Renn's guilt; road-tools glyphs and overheard speech
+establish his illiteracy and the first-light transfer. Below the roofs, Ilen's pledged
+rope frame waits to be seized. The short end card commits named story flags to
+`user://thief_story.json`; checkpoints never undo already committed flags.
+
+Arrows/A/D move · Up/W/Space/Z jump and climb · Down/S crouch · C/Shift slide · X/J
+shove or struggle · hold E interact · V throw a pebble or drop the carried object ·
+Up at the roof exit · Esc pause · F11 window/fullscreen. Always-on HUD shows exposure,
+two quick-tool slots and one carried-object slot. A/Y/B/X and right shoulder provide
+jump/interact/slide/shove/throw on a gamepad; D-pad or left stick moves/crouches/climbs.
+A shove breaks one lone guard's grab per checkpoint; two guards prevent that escape.
+An alert guard facing Renn usually catches a shove. Pebbles are finite but can be
+replenished from stone piles; a pry hook speeds work on the vent or grate. Hold
+interactions stop progressing when released or moving. Retry restores gates, loot,
+guards, inventory and local flags to the stage snapshot. The first lower roof saves
+automatically; the yard's blue checkpoint marker requires E.
+
+```sh
+godot --headless --fixed-fps 60 --path . -- --slice --smoke=1800
+godot --headless --fixed-fps 60 --path . -- --slice --route=tests/slice_routes/vent.seq
+godot --headless --fixed-fps 60 --path . -- --slice --route=tests/slice_routes/drain.seq
+.venv/bin/python tools/art/recolor.py              # local Pillow recolors; no service calls
+python tools/levels/build_chapter1.py             # regenerate authored slice map
+```
+
+`src/thief/` contains the independent RennController, WatchGuard awareness,
+ThiefInteractable, ThiefCheckpoint, StoryState, DiegeticText, pebble and SliceLevel.
+The slice runner uses the same frame press/release syntax as prototype routes, plus
+`slice_interact` and `slice_throw`. It starts at the normal spawn, skips only the timed
+intro, and succeeds only on the real exit signal. `--trace=30` assists route authoring.
+`tests/run.sh` adds both slice routes, random-input smoke and the slice mechanics scene,
+sequentially. No second Godot instance is needed.
+
+Art is **stand-in**: `renn_standin` and `renn_standin_ledge` recolor Kael's green skin
+to slate blue, dark hair to bronze, and green cloth to grey-brown; `watch_standin`
+recolors Vesh to a Norran watch palette. Metadata and anchors are preserved. Renn
+still holds a sword in some source frames, and the watch uses Vesh's silhouette;
+there is no sword attack in the slice. Scenery uses theme 2 and a procedural dark
+skyline. No new art was commissioned. Visual composition, controller hardware and
+the intended 10–20-minute first-time pacing need a human playtest; headless routes
+are rehearsed fast paths, not playtime measurements.
+
+## Prototype controls (always shown on screen)
 
 Arrows/WASD move · Up/W/Space/Z jump · X/J attack (press again for the second hit) · C/L/Shift dodge-roll ·
 V/K parry (block; the first 0.2 s deflects and staggers the attacker, and your next hit is a critical) ·

@@ -13,6 +13,7 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 [autoload]
 
 Game="*res://src/game.gd"
+StoryState="*res://src/thief/story_state.gd"
 
 [display]
 

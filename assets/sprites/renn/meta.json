@@ -1,0 +1,41 @@
+{
+  "frame_size": [
+    96,
+    96
+  ],
+  "anchor": [
+    48,
+    83
+  ],
+  "faces": "right",
+  "anims": {
+    "idle": {
+      "fps": 5,
+      "loop": true
+    },
+    "run": {
+      "fps": 12,
+      "loop": true
+    },
+    "jump": {
+      "fps": 10,
+      "loop": false
+    },
+    "sneak": {
+      "fps": 7,
+      "loop": true
+    },
+    "slide": {
+      "fps": 14,
+      "loop": false
+    },
+    "shove": {
+      "fps": 16,
+      "loop": false
+    },
+    "throw": {
+      "fps": 16,
+      "loop": false
+    }
+  }
+}

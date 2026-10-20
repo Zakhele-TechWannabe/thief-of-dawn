@@ -1,0 +1,21 @@
+{
+  "frame_size": [
+    96,
+    192
+  ],
+  "anchor": [
+    48,
+    96
+  ],
+  "faces": "right",
+  "anims": {
+    "hang": {
+      "fps": 5,
+      "loop": true
+    },
+    "climb": {
+      "fps": 14,
+      "loop": false
+    }
+  }
+}

@@ -44,7 +44,9 @@ func _ready() -> void:
 			print("ROUTE FAIL route forbids at/hold/seq, player pos unavailable")
 			get_tree().quit(1)
 			return
-	if _args.has("level") or _args.has("route"):
+	if _args.has("slice"):
+		_start_slice()
+	elif _args.has("level") or _args.has("route"):
 		_start_level(int(_args.get("level", "1")))
 	else:
 		_title()
@@ -75,18 +77,21 @@ func _title() -> void:
 	shade.color = Color(0, 0, 0, 0.25)
 	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.add_child(shade)
-	var prompt := _label("Press SPACE to begin", 16, Game.ui_font)
-	prompt.position = Vector2(0, 300)
-	prompt.size = Vector2(640, 20)
-	root.add_child(prompt)
-	var blink := prompt.create_tween().set_loops()
-	blink.tween_property(prompt, "modulate:a", 0.25, 0.8)
-	blink.tween_property(prompt, "modulate:a", 1.0, 0.8)
 	var layer := CanvasLayer.new()
 	layer.add_child(root)
 	add_child(layer)
 	_current = layer
-	_wait_key(func(): _card("intro", func(): _start_level(1)))
+	for pair in [["Chapter I — The Boy (playable slice)", _start_slice], ["Prototype levels — Kael 1–2", func(): _card("intro", func(): _start_level(1))]]:
+		var button := Button.new()
+		button.text = pair[0]
+		button.position = Vector2(90, 280 + (root.get_child_count() - 2) * 28)
+		button.size = Vector2(460, 22)
+		button.add_theme_font_override("font", Game.ui_font)
+		button.add_theme_font_size_override("font_size", 12)
+		button.pressed.connect(pair[1])
+		root.add_child(button)
+		if root.get_child_count() == 3:
+			button.grab_focus()
 
 
 func _label(text: String, size: int, font: Font) -> Label:
@@ -339,3 +344,32 @@ func _route(p: Player) -> void:
 			_route_fail("Kael died", p)
 			return
 	_route_fail("sequence ended without completed signal", p)
+
+
+func _start_slice() -> void:
+	_clear()
+	_waiting = Callable()
+	var slice := SliceLevel.create()
+	slice.process_mode = Node.PROCESS_MODE_PAUSABLE
+	add_child(slice)
+	_current = slice
+	slice.completed.connect(func():
+		if _args.has("route") or _args.has("smoke"):
+			return
+		STORY["slice_end"] = "Renn is out. Behind him, Slateford wakes."
+		_slice_end())
+	if _args.has("route") or _args.has("smoke"):
+		slice.skip_intro()
+		var harness := preload("res://tests/slice_runner.gd").new()
+		harness.level = slice
+		harness.args = _args
+		add_child(harness)
+
+
+func _slice_end() -> void:
+	_card("slice_end", _title)
+	var card := _current
+	await get_tree().create_timer(4.0).timeout
+	if _current == card:
+		_waiting = Callable()
+		_title()

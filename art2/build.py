@@ -183,3 +183,13 @@ if __name__ == "__main__":
     import sys
     if "ledge" in sys.argv:
         build_ledge()
+
+
+if __name__ == "__main__":
+    import sys
+    if "renn" in sys.argv:
+        # hand-picked raw frame indices (00 is the reference pose); the generator pads starts with idle poses
+        build_actor("renn", "renn", "renn_flash_00.png", {
+            "idle": (5, True, [1, 2, 3, 4]), "run": (12, True, [2, 3, 4, 5, 6, 7, 8]),
+            "jump": (10, False, [4, 5, 6]), "fall": (6, True, [6]), "sneak": (7, True, [1, 2, 3, 4, 5, 6]),
+            "slide": (14, False, [3, 4, 5]), "shove": (16, False, [2, 3, 4]), "throw": (16, False, [1, 2, 3, 4])})

@@ -67,3 +67,44 @@ a left-hand lip to reach the big potion; hold left at the top to grab it. Timed 
 
 Regenerate both maps with their corresponding `tools/levels/build_levelN.py`. Run `tests/run.sh` after
 changes; it imports assets first and runs each level's smoke test and each committed route sequentially.
+
+## Chapter I slice (`levels/chapter1.txt`)
+
+Built by `python tools/levels/build_chapter1.py`. `SliceLevel` reuses `Level` parsing,
+16 px tile collision, theme-2 stone/timber, lanterns, candles and torches. It replaces
+prototype actors and background with Renn, watchmen and a procedural predawn skyline.
+This vocabulary is scoped to the slice; prototype maps keep their existing meanings.
+
+| Character | Slice meaning |
+|---|---|
+| `#`, `=`, `.` | Solid stone, one-way timber, air (unchanged) |
+| `@` | Renn's feet/start and initial stage snapshot |
+| `g` | Watchman; patrol points from the header |
+| `B` | Hadrik; watchman sprite with cool tint, authored railing opportunity |
+| `t`, `l`, `c` | Torch, lantern, candles; visible warm pools also feed the awareness light map |
+| `T`, `r` | Timber brace, drain water decor (unchanged) |
+| `v` | Hold interaction: loose vent hinge and tall vent gate; records `escape_route=vent` |
+| `d` | Hold interaction: drain grate, 32 px opening; records `escape_route=drain` |
+| `p` | Watchman's table with coin pouch; two-second steal, observation alerts immediately |
+| `q` | Pry hook, second quick-tool slot; speeds hinge/grate work |
+| `o` | Loose stones; replenish one pebble if a tool slot is free |
+| `u` | Foreground crate cover; crouching within its bounds reduces exposure |
+| `n` | Work-transfer notice: fixed glyph vocabulary and crossed road-tools sketch |
+| `k` | Stage checkpoint; hold E in the yard, automatic on first lower roof |
+| `R` | Railing; a nearby shove embarrasses Hadrik without killing him |
+| `E` | Roof exit; UP completes after the railing encounter |
+
+`patrol_<column>_<row>: c,r;c,r;...` supplies an ordered loop of tile-foot positions
+for the guard on that cell. All guards stop at unsupported edges; investigations and
+chases use the last position actually seen/heard. They do not pathfind between floors.
+Light exposure is radial falloff over 130 px, blocked by solid collision; the baseline
+is shadow. Cones use the same wall raycasts as perception. Noise has distance falloff;
+shouts inform only guards within 240 px of the shouting guard.
+
+The cell furniture can be climbed to the vent. That route crosses the lit upper walk,
+its table, a patrol and the unreadable notice. The low drain passes beneath the walk,
+with water, a different pouch and a crate before emerging beside the yard patrol.
+Both join at Hadrik's railing, then climb workshop steps onto five lower roofs, with
+catch awnings below gaps, a new checkpoint, cover, stones and a final roof watchman.
+Committed StoryState flags are outside stage snapshots. Snapshots restore all guard
+states/positions, gate collisions, loot, tools, carried object and pending route flags.
