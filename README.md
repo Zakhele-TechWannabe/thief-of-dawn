@@ -70,7 +70,7 @@ are rehearsed fast paths, not playtime measurements.
 
 Arrows/WASD move · Up/W/Space/Z jump · X/J attack (press again for the second hit) · C/L/Shift dodge-roll ·
 V/K parry (block; the first 0.2 s deflects and staggers the attacker, and your next hit is a critical) ·
-Up climbs from a ledge and enters doors · Down+Jump drops through a plank · F11 fullscreen/window · Esc pause. Starts fullscreen. Gamepad works too.
+Up climbs from a ledge and enters doors · Down+Jump drops through a plank · F11 fullscreen/window · F10 move to the next screen (remembered for next launch; or start with `-- --screen 1`) · Esc pause. Starts fullscreen. Gamepad works too.
 
 ## Layout
 

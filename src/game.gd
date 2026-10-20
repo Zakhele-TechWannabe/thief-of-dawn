@@ -19,6 +19,7 @@ const BINDINGS := {
 	"parry": [KEY_V, KEY_K],
 	"pause": [KEY_ESCAPE, KEY_P],
 	"fullscreen": [KEY_F11],
+	"next_screen": [KEY_F10],
 }
 const PAD := {
 	"jump": JOY_BUTTON_A, "attack": JOY_BUTTON_X, "dodge": JOY_BUTTON_B, "parry": JOY_BUTTON_RIGHT_SHOULDER,
@@ -65,9 +66,48 @@ func _ready() -> void:
 		axis.axis = pair[1]
 		axis.axis_value = pair[2]
 		InputMap.action_add_event(pair[0], axis)
+	# OS.get_cmdline_args() includes "--screen N" when given; the saved choice only applies otherwise
+	if not "--screen" in OS.get_cmdline_args():
+		_restore_screen.call_deferred()
+
+
+const SETTINGS := "user://settings.cfg"
+
+
+## Open on the screen the player last chose (F10 moves the game to the next screen and remembers it).
+func _restore_screen() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS) != OK:
+		return
+	var screen: int = cfg.get_value("display", "screen", -1)
+	if screen >= 0 and screen < DisplayServer.get_screen_count():
+		_move_to_screen(screen)
+
+
+func _move_to_screen(screen: int) -> void:
+	var mode := DisplayServer.window_get_mode()
+	if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		# fullscreen windows can't be moved directly: drop to windowed, move, go back
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_current_screen(screen)
+		DisplayServer.window_set_mode(mode)
+	else:
+		DisplayServer.window_set_current_screen(screen)
+
+
+func _save_screen(screen: int) -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS)
+	cfg.set_value("display", "screen", screen)
+	cfg.save(SETTINGS)
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("next_screen") and DisplayServer.get_screen_count() > 1:
+		var next := (DisplayServer.window_get_current_screen() + 1) % DisplayServer.get_screen_count()
+		_move_to_screen(next)
+		_save_screen(next)
+		toast.emit("Screen %d of %d (remembered)" % [next + 1, DisplayServer.get_screen_count()])
 	if event.is_action_pressed("fullscreen"):
 		var full := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if full else DisplayServer.WINDOW_MODE_FULLSCREEN)

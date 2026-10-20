@@ -250,7 +250,7 @@ func _screenshot_mode(p: Player) -> void:
 		await get_tree().physics_frame
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png(_args["shot"])
-	print("shot saved ", _args["shot"], " player at ", p.global_position, " hp ", p.hp, " state ", p.state)
+	print("shot saved ", _args["shot"], " player at ", p.global_position, " hp ", p.hp, " state ", p.state, " screen ", DisplayServer.window_get_current_screen())
 	for e in _current.get_children():
 		if e is Shade:
 			print("  shade at ", e.global_position.round(), " hp ", e.hp, " state ", e.state)
