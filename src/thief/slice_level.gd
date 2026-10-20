@@ -25,6 +25,9 @@ var intro := true
 var overlay: Control
 var overlay_layer: CanvasLayer
 var caught_count := 0
+var tips_shown := {}
+var tip_text := ""
+var tip_time := 0.0
 
 static func create() -> SliceLevel:
 	var result := SliceLevel.new()
@@ -306,6 +309,28 @@ func throw_pebble(spot: Vector2, speed: Vector2) -> void:
 	pebble.add_to_group("slice_pebbles")
 	add_child(pebble)
 
+## A first-time explanation, shown once per key in a box near the bottom of the screen.
+func tip(key: String, text: String) -> void:
+	if tips_shown.has(key):
+		return
+	tips_shown[key] = true
+	tip_text = text
+	tip_time = 7.0
+
+
+## What Renn should be doing right now, in plain words (always shown under the top bar).
+func objective() -> String:
+	if finished:
+		return ""
+	if not flags.has("escape_route"):
+		return "Get out of the cell: the loose vent up high, or the drain down low."
+	if renn.position.x < 860:
+		return "Cross under the guard walk without being seen." if flags.escape_route == "drain" else "Cross the guard walk without being seen. Stay in the dark."
+	if not flags.get("hadrik_humiliated", false):
+		return "Hadrik holds the roof latch. Get past the yard watch and shove Hadrik into the railing (X)."
+	return "Over the roofs. Reach the far roof and climb out (UP at the arrow)."
+
+
 func say(line: String, who: Node2D = null) -> void:
 	message = line
 	message_time = 3.5
@@ -341,6 +366,9 @@ func skip_intro() -> void:
 func _process(delta: float) -> void:
 	super._process(delta)
 	message_time = maxf(0,message_time-delta)
+	tip_time = maxf(0, tip_time - delta)
+	if not intro:
+		_first_time_tips()
 	if intro:
 		intro_time += delta
 		if intro_time > 19.2 or (intro_time > .5 and Input.is_action_just_pressed("jump")):
@@ -412,6 +440,34 @@ func _draw_speech() -> void:
 	overlay.draw_string(Game.ui_font, pos, message, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1,.96,.86))
 
 
+func _wrap(text: String, max_w: float) -> PackedStringArray:
+	var out := PackedStringArray()
+	var line := ""
+	for word in text.split(" "):
+		var test := word if line == "" else line + " " + word
+		if Game.ui_font.get_string_size(test, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x > max_w and line != "":
+			out.append(line)
+			line = word
+		else:
+			line = test
+	if line != "":
+		out.append(line)
+	return out
+
+
+func _first_time_tips() -> void:
+	if tip_time > 0:
+		return
+	tip("start", "You're Renn. Climb (UP) and look around. Hold E on things you can take or work.")
+	for guard in guards:
+		if guard.position.distance_to(renn.position) < 260:
+			tip("guards", "Guards see in a cone ahead of them. The ? fills as they notice you: keep to the dark and crouch (DOWN) to stay hidden.")
+			if guard.suspicion > .2:
+				tip("noticed", "He's noticing you. Back off into shadow, crouch, or throw a pebble (V) to pull his eyes away.")
+	if renn.position.x > 860 and renn.position.x < 1100 and not flags.get("hadrik_humiliated", false):
+		tip("yard", "Two watchmen in the yard. Go over them on the beams, or throw a pebble to turn one away.")
+
+
 func _keycap(x: float, y: float, key: String, label: String) -> float:
 	var kw := Game.ui_font.get_string_size(key, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x + 6
 	overlay.draw_rect(Rect2(x, y-9, kw, 11), Color(.85,.8,.65,.95))
@@ -425,10 +481,27 @@ func _draw_hud() -> void:
 	# top line: where, what he carries, whether he's in shadow
 	overlay.draw_rect(Rect2(0,0,640,16),Color(0,0,0,.6))
 	_ui(Vector2(8,11),"YEAR 320  /  " + ("THE LOWER ROOFS" if renn.position.x > 1150 else "BEHIND THE DOOR"))
-	var kit := ("Tools: " + (", ".join(renn.tools) if renn.tools.size() else "none") + "   Carrying: " + (renn.carried if renn.carried else "nothing")).to_upper()
+	var kit := ("Pebbles %d/3   Tools: " % renn.pebbles + (", ".join(renn.tools) if renn.tools.size() else "none") + "   Carrying: " + (renn.carried if renn.carried else "nothing")).to_upper()
 	var shade := "IN SHADOW" if light_at(renn.position+Vector2(0,-24)) < .3 else "IN THE LIGHT"
 	var right := kit + "   " + shade
 	_ui(Vector2(632 - Game.ui_font.get_string_size(right, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x, 11), right)
+	# goal line
+	var goal := objective()
+	if goal != "" and not intro:
+		overlay.draw_rect(Rect2(0,16,640,13),Color(0,0,0,.45))
+		_ui(Vector2(8,26), "GOAL: " + goal)
+	# first-time tip
+	if tip_time > 0 and not intro:
+		var lines := _wrap(tip_text, 520)
+		var tw := 0.0
+		for l in lines:
+			tw = maxf(tw, Game.ui_font.get_string_size(l, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x)
+		var tx := (640 - tw) / 2
+		var top := 300 - lines.size() * 12
+		overlay.draw_rect(Rect2(tx - 10, top - 4, tw + 20, lines.size() * 12 + 8), Color(.12,.1,.06,.9))
+		overlay.draw_rect(Rect2(tx - 10, top - 4, 3, lines.size() * 12 + 8), Color(.85,.7,.4))
+		for i in lines.size():
+			_ui(Vector2(tx, top + 9 + i * 12), lines[i])
 	# always-on controls, one line
 	overlay.draw_rect(Rect2(0,344,640,16),Color(0,0,0,.6))
 	var x := 6.0

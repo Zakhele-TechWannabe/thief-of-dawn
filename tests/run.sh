@@ -42,4 +42,5 @@ for route in tests/slice_routes/*.seq; do
     run_check 'ROUTE OK' --headless --fixed-fps 60 --path . -- --slice --route="$route"
 done
 run_check 'MECHANICS OK' --headless --fixed-fps 60 --path . tests/slice_mechanics.tscn
+run_check 'FAIRNESS' --headless --fixed-fps 60 --path . tests/slice_fairness.tscn
 printf 'ALL TESTS OK\n'

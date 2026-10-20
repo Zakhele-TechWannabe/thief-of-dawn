@@ -56,7 +56,9 @@ func can_see(p: Node2D) -> bool:
 
 func detection_rate(p: Node2D) -> float:
 	var lit: float = level.light_at(p.position + Vector2(0, -24))
-	var rate := .7 + lit * 1.5
+	# fair for a first-timer: ~3 s to spot a boy standing in shadow, ~1 s in lantern light, slower far away
+	var rate := .25 + lit * .9
+	rate *= lerpf(1.3, .55, clampf(position.distance_to(p.position) / 245.0, 0, 1))
 	if p.crouched and lit < .3:
 		rate = .025
 	elif p.crouched:

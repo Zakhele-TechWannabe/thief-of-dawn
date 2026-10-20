@@ -113,6 +113,56 @@ func _ready() -> void:
 	loot.work(.1,true)
 	if not check(g.state == WatchGuard.S.CHASE,"observed mid-steal alerts immediately"):
 		return
+	# Pebbles occupy their own pocket, including when both tool slots are full.
+	if not check(p.pebbles == 1 and "pebble" not in p.tools, "starts with one counted pebble"):
+		return
+	var pile := ThiefInteractable.new()
+	pile.level = level
+	pile.kind = "pebbles"
+	level.add_child(pile)
+	p.tools.assign(["pry hook", "test tool"])
+	for expected in [2, 3, 3]:
+		pile.work(pile.duration, true)
+		if not check(p.pebbles == expected and not pile.used and p.tools.size() == 2, "pebble pile increments to cap without tool slots"):
+			return
+	pile.queue_free()
+	var drain: ThiefInteractable = level.interactables[1]
+	p.tools.clear()
+	drain.work(drain.duration * 2, true)
+	if not check(not drain.used and drain.progress == 0 and not level.flags.has("escape_route") and level.tips_shown.has("rusted"), "rusted drain refuses bare hands with tip"):
+		return
+	p.tools.append("pry hook")
+	drain.work(drain.duration, true)
+	await frames(2)
+	if not check(drain.used and level.flags.escape_route == "drain" and drain.gate.get_child(0).disabled, "hook opens drain"):
+		return
+	drain.used = false
+	drain.progress = 0
+	drain.set_open(false)
+	var vent := ThiefInteractable.new()
+	vent.level = level
+	vent.kind = "vent"
+	vent.duration = 1.6
+	level.add_child(vent)
+	p.tools.clear()
+	vent.work(1, true)
+	if not check(not vent.used and is_equal_approx(vent.progress, 1), "bare vent takes full work duration"):
+		return
+	vent.work(0, false)
+	p.tools.append("pry hook")
+	vent.work(1, true)
+	if not check(vent.used, "hook opens vent 1.6 times faster"):
+		return
+	vent.queue_free()
+	for hadrik in [false, true]:
+		g.hadrik = hadrik
+		p.grace = 0
+		p._enter(RennController.S.MOVE)
+		p.grab(g)
+		if not check(level.message.begins_with("Hadrik:" if hadrik else "Watchman:") and level.tips_shown.has("grabbed"), "grab names its own guard and shows struggle tip"):
+			return
+	g.hadrik = false
+	p._enter(RennController.S.MOVE)
 	# Snapshot doors, guards, collected items and inventory. A committed flag lives outside it.
 	reset_guard()
 	p.position = Vector2(80,384)
@@ -120,7 +170,9 @@ func _ready() -> void:
 	loot.used = false
 	level.flags = {"escape_route":"drain"}
 	StoryState.flags["slice_test_committed"] = true
+	p.pebbles = 2
 	level.capture_checkpoint(p.position)
+	p.pebbles = 0
 	loot.used = true
 	level.interactables[1].used = true
 	level.interactables[1].set_open(true)
@@ -133,7 +185,7 @@ func _ready() -> void:
 	p.set_physics_process(false)
 	if not check(level.caught_count == 1 and p.position.distance_to(Vector2(80,384))<2,"caught struggle expires into checkpoint restore"):
 		return
-	if not check(g.position.distance_to(Vector2(168,384))<2 and g.state == WatchGuard.S.PATROL and not loot.used and not level.interactables[1].used and p.carried == "","checkpoint resets guards, loot, door, carry"):
+	if not check(g.position.distance_to(Vector2(168,384))<2 and g.state == WatchGuard.S.PATROL and not loot.used and not level.interactables[1].used and p.carried == "" and p.pebbles == 2,"checkpoint resets guards, loot, door, carry"):
 		return
 	if not check(StoryState.flags.get("slice_test_committed",false) and level.flags.escape_route == "drain","restore preserves committed decisions"):
 		return
@@ -179,5 +231,5 @@ func _ready() -> void:
 	Input.action_release("attack")
 	if not check(p.state == RennController.S.MOVE and p.break_used and g.state == WatchGuard.S.STAGGER,"one guard permits a single shove struggle"):
 		return
-	print("MECHANICS OK slice slide walls floors shadow(5s) light pebble return shove steal caught checkpoint flags shout two-guards struggle")
+	print("MECHANICS OK slice slide walls floors shadow(5s) light pebble-count cap rusted-drain hook-vent guard-name return shove steal caught checkpoint flags shout two-guards struggle")
 	get_tree().quit()

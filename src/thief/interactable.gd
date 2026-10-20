@@ -22,7 +22,11 @@ func work(delta: float, held: bool) -> void:
 				guard.last_known = level.renn.position
 				guard.suspicion = 1
 				guard.enter(WatchGuard.S.CHASE)
-	progress += delta * (1.6 if kind in ["vent", "drain"] and "pry hook" in level.renn.tools else 1.0)
+	if kind == "drain" and "pry hook" not in level.renn.tools:
+		progress = 0
+		level.tip("rusted", "The grate is rusted shut. You'll need something to pry it. There was a hook up on the shelf.")
+		return
+	progress += delta * (1.6 if kind == "vent" and "pry hook" in level.renn.tools else 1.0)
 	if progress >= duration:
 		if kind == "loot" and level.renn.carried != "":
 			level.say("Hands full. V drops what you're holding.")
@@ -40,11 +44,17 @@ func work(delta: float, held: bool) -> void:
 			"tool":
 				if level.renn.tools.size() < 2:
 					level.renn.tools.append("pry hook")
+					level.tip("hook", "Pry hook: it opens the rusted drain grate, and works the vent hinge faster.")
 				else:
 					used = false
+					level.say("Hands full of tools already.")
 			"pebbles":
-				if "pebble" not in level.renn.tools and level.renn.tools.size() < 2:
-					level.renn.tools.append("pebble")
+				if level.renn.pebbles < 3:
+					level.renn.pebbles += 1
+					level.say("Pebble pocketed (%d/3)." % level.renn.pebbles)
+					level.tip("pebble", "V throws a pebble. A guard who hears it goes to look, and turns his back on you.")
+				else:
+					level.say("Pockets full of pebbles (3/3).")
 				used = false
 			"checkpoint":
 				level.capture_checkpoint(position)

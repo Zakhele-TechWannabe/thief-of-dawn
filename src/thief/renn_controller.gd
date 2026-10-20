@@ -9,7 +9,8 @@ var level: Node2D
 var facing := 1.0
 var state := S.MOVE
 var crouched := false
-var tools: Array[String] = ["pebble"]
+var tools: Array[String] = []
+var pebbles := 1          # thrown stones: a count, not a tool slot
 var carried := ""
 var grabber: Node2D
 var break_used := false
@@ -114,8 +115,8 @@ func _physics_process(delta: float) -> void:
 		if carried != "":
 			carried = ""
 			level.noise(position, 200)
-		elif "pebble" in tools:
-			tools.erase("pebble")
+		elif pebbles > 0:
+			pebbles -= 1
 			level.throw_pebble(position + Vector2(0, -32), Vector2(facing * 210, -230))
 			_act("throw", .3)
 	level.work_interaction(delta, Input.is_action_pressed("slice_interact"))
@@ -136,7 +137,8 @@ func grab(guard: Node2D) -> void:
 	grabber = guard
 	_enter(S.GRABBED)
 	_show_ledge_sprite("")
-	level.say("Hadrik: Back inside.  [X: struggle]", guard)
+	level.say(("Hadrik: Back inside." if guard.get("hadrik") else "Watchman: Got you, boy.") + "  [X: struggle]", guard)
+	level.tip("grabbed", "Grabbed! Tap X to twist free. It works once, and only if he's alone.")
 
 func _try_ledge() -> bool:
 	var hand_y := global_position.y - 46.0

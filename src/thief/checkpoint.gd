@@ -10,7 +10,7 @@ func capture(level: Node2D, spawn: Vector2) -> void:
 	for item in level.interactables:
 		items.append(item.used)
 	data = {"spawn": spawn, "guards": guards, "items": items, "flags": level.flags.duplicate(true),
-		"tools": level.renn.tools.duplicate(), "carried": level.renn.carried}
+		"tools": level.renn.tools.duplicate(), "pebbles": level.renn.pebbles, "carried": level.renn.carried}
 func restore(level: Node2D) -> void:
 	if data.is_empty():
 		return
@@ -36,6 +36,7 @@ func restore(level: Node2D) -> void:
 	level.renn.position = data.spawn
 	level.renn.velocity = Vector2.ZERO
 	level.renn.tools.assign(data.tools)
+	level.renn.pebbles = data.get("pebbles", 1)
 	level.renn.carried = data.carried
 	level.renn.break_used = false
 	level.renn.grace = 2

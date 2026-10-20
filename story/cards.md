@@ -31,3 +31,13 @@ Out of the mines, the festival still roars in Dornis. Nobody knows.
 Shadows move on the rooftops: Tenebri shades in Morrow's service.
 
 TO BE CONTINUED
+
+## slice_intro
+
+Slateford, Year 320. A cart-road town in the foothills below Norra.
+
+Renn is fifteen, and a thief. Not a hungry orphan, not a misunderstood hero. Today he was caught lifting a second purse he didn't need.
+
+Last year his mother pledged her rope frame, the family's living, against his debts. At first light they send him to the road gangs for the season.
+
+He doesn't intend to be there.

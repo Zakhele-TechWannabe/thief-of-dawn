@@ -347,6 +347,10 @@ func _route(p: Player) -> void:
 
 
 func _start_slice() -> void:
+	if not (_args.has("route") or _args.has("smoke") or _args.has("nointro")) and not _slice_intro_seen:
+		_slice_intro_seen = true
+		_card("slice_intro", _start_slice)
+		return
 	_clear()
 	_waiting = Callable()
 	var slice := SliceLevel.create()
@@ -364,6 +368,9 @@ func _start_slice() -> void:
 		harness.level = slice
 		harness.args = _args
 		add_child(harness)
+
+
+var _slice_intro_seen := false
 
 
 func _slice_end() -> void:

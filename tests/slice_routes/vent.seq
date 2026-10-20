@@ -11,8 +11,6 @@
 436-attack
 460+attack
 461-attack
-560+jump
-605-jump
 630-move_right
 630+move_left
 631+attack
