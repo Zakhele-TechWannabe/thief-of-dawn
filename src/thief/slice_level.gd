@@ -25,6 +25,7 @@ var intro := true
 var overlay: Control
 var overlay_layer: CanvasLayer
 var caught_count := 0
+var notice_pos := Vector2.ZERO
 var tips_shown := {}
 var tip_text := ""
 var tip_time := 0.0
@@ -210,11 +211,12 @@ func _build_objects() -> void:
 			var feet := Vector2(c*16+8,(r+1)*16)
 			match ch:
 				"@": spawn = feet
-				"g", "B":
+				"g", "B", "z":
 					var guard := WatchGuard.new()
 					guard.level = self
 					guard.position = feet
 					guard.hadrik = ch == "B"
+					guard.asleep = ch == "z"
 					var key := "patrol_%d_%d" % [c,r]
 					for point in String(info.get(key, "%d,%d;%d,%d" % [c,r,c+6,r])).split(";"):
 						var xy := point.split(",")
@@ -228,9 +230,9 @@ func _build_objects() -> void:
 					elif ch == "l": _lantern(c,r)
 					else: _candles(feet)
 				"T", "r": _mine_decor(ch,c,r)
-				"v", "d", "p", "q", "k", "o":
-					var kinds := {"v":"vent", "d":"drain", "p":"loot", "q":"tool", "k":"checkpoint", "o":"pebbles"}
-					var prompts := {"v":"Work the loose vent hinge", "d":"Lift the drain grate", "p":"Lift the watchman's coin pouch", "q":"Take pry hook", "k":"Rest here (checkpoint)", "o":"Pocket a pebble"}
+				"v", "d", "p", "q", "k", "K", "o":
+					var kinds := {"v":"vent", "d":"drain", "p":"loot", "q":"tool", "k":"checkpoint", "K":"checkpoint", "o":"pebbles"}
+					var prompts := {"v":"Work the loose vent hinge", "d":"Lift the drain grate", "p":"Lift the watchman's coin pouch", "q":"Take pry hook", "k":"", "K":"", "o":"Pocket a pebble"}
 					var item := ThiefInteractable.new()
 					item.kind = kinds[ch]
 					item.prompt = prompts[ch]
@@ -250,6 +252,7 @@ func _build_objects() -> void:
 						item.gate.add_child(shape)
 						item.add_child(item.gate)
 				"n":
+					notice_pos = feet
 					var notice := DiegeticText.new()
 					notice.position = feet
 					add_child(notice)
@@ -324,8 +327,12 @@ func objective() -> String:
 		return ""
 	if not flags.has("escape_route"):
 		return "Get out of the cell: the loose vent up high, or the drain down low."
-	if renn.position.x < 860:
-		return "Cross under the guard walk without being seen." if flags.escape_route == "drain" else "Cross the guard walk without being seen. Stay in the dark."
+	if flags.escape_route == "drain" and renn.position.x < 860:
+		return "Crawl under the guard walk (hold DOWN). Stay low and quiet."
+	if renn.position.x < 580:
+		return "A watchman is dozing by the table. Crouch (DOWN) and creep past him."
+	if renn.position.x < 900:
+		return "Another watchman patrols ahead. Jump up into the dark rafters and cross above him."
 	if not flags.get("hadrik_humiliated", false):
 		return "Hadrik holds the roof latch. Get past the yard watch and shove Hadrik into the railing (X)."
 	return "Over the roofs. Reach the far roof and climb out (UP at the arrow)."
@@ -340,7 +347,7 @@ func work_interaction(delta: float, held: bool) -> void:
 	active = null
 	stealing = false
 	for item in interactables:
-		if not item.used and item.position.distance_to(renn.position) < 43:
+		if not item.used and item.kind != "checkpoint" and item.position.distance_to(renn.position) < 43:
 			if active == null or item.position.distance_to(renn.position) < active.position.distance_to(renn.position):
 				active = item
 	for item in interactables:
@@ -349,7 +356,8 @@ func work_interaction(delta: float, held: bool) -> void:
 
 func capture_checkpoint(spot: Vector2) -> void:
 	checkpoint_state.capture(self,spot)
-	say("Renn: A moment. Just one.")
+	if spot != spawn:
+		say("Checkpoint.")
 
 func restore_checkpoint() -> void:
 	caught_count += 1
@@ -389,7 +397,7 @@ func _physics_process(_delta: float) -> void:
 			notice_seen = true
 			say("Renn: Picks. Shovels. The rest's scratches.", renn)
 		for item in interactables:
-			if item.kind == "checkpoint" and not item.used and item.position.x > 1200 and item.position.distance_to(renn.position) < 22:
+			if item.kind == "checkpoint" and not item.used and absf(item.position.x - renn.position.x) < 20 and absf(item.position.y - renn.position.y) < 40:
 				item.used = true
 				renn.break_used = false
 				capture_checkpoint(item.position)
@@ -460,10 +468,15 @@ func _first_time_tips() -> void:
 		return
 	tip("start", "You're Renn. Climb (UP) and look around. Hold E on things you can take or work.")
 	for guard in guards:
-		if guard.position.distance_to(renn.position) < 260:
+		if guard.asleep and guard.position.distance_to(renn.position) < 200:
+			tip("sleeper", "He's asleep. Creep past crouched (DOWN): running or landing hard will wake him. His pouch is on the table, if you dare (hold E).")
+			return
+		if not guard.asleep and guard.position.distance_to(renn.position) < 260:
 			tip("guards", "Guards see in a cone ahead of them. The ? fills as they notice you: keep to the dark and crouch (DOWN) to stay hidden.")
 			if guard.suspicion > .2:
 				tip("noticed", "He's noticing you. Back off into shadow, crouch, or throw a pebble (V) to pull his eyes away.")
+	if renn.position.x > 560 and renn.position.x < 700 and renn.position.y < 300:
+		tip("rafters", "The rafters above are dark. Jump up (UP) and cross over him. He stops at each end of his beat to look out: move while he walks away.")
 	if renn.position.x > 860 and renn.position.x < 1100 and not flags.get("hadrik_humiliated", false):
 		tip("yard", "Two watchmen in the yard. Go over them on the beams, or throw a pebble to turn one away.")
 

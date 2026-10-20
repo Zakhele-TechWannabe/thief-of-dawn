@@ -1,9 +1,11 @@
+# Climb onto the cell furniture and fetch the pry hook first.
 0+move_right
 24+jump
 60-jump
 50-move_right
 90+slice_interact
 160-slice_interact
+# Return to the floor, then crouch to the drain and work the grate.
 165+move_left
 200-move_left
 300+down
@@ -11,28 +13,49 @@
 460-move_right
 465+slice_interact
 600-slice_interact
+# Crawl beneath the entire guard walk.
 605+move_right
-1248+attack
-1249-attack
-1250-down
-1284+attack
-1285-attack
-1323+jump
-1363-jump
-1413+jump
-1453-jump
-1478+jump
-1518-jump
-1598+jump
-1618+attack
-1619-attack
-1638-jump
-1683+attack
-1684-attack
-1703+jump
-1743-jump
-1838+jump
-1878-jump
-1918-move_right
-1923+up
-1924-up
+# Stop beyond the low ceiling; jump onto the beams before approaching the yard watch.
+1195-move_right
+1210-down
+1210+jump
+1210+move_right
+1232-move_right
+1250-jump
+1252+down
+# Creep to the safe waiting spot and throw right: the pebble lands on the yard floor beside the rail.
+1310+move_right
+1330-move_right
+1334+slice_throw
+1335-slice_throw
+# After the investigation and return, wait for Hadrik to face the rail; drop behind him and shove.
+2230+move_right
+2368-move_right
+2368+attack
+2369-attack
+# Climb the lower roofs.
+2410-down
+2410+move_right
+2420+jump
+2460-jump
+2510+jump
+2550-jump
+2575+jump
+2615-jump
+# Use the screened roof rafters; stop, observe, and creep across above the guard.
+2670+jump
+2710-jump
+2710-move_right
+2712+down
+2770+move_right
+# Pause at the far end, then cross the remaining roofs to the exit.
+2890-move_right
+2890-down
+2920+move_right
+2960+jump
+3000-jump
+3050+jump
+3090-jump
+3119-move_right
+3170+up
+3171-up

@@ -21,6 +21,8 @@ func reset_guard(spot := Vector2(168,384)) -> void:
 	g.suspicion = 0
 	g.facing = 1
 	g.timer = 0
+	g.asleep = false
+	g.pause = 0
 func _ready() -> void:
 	level = SliceLevel.new()
 	var rows: Array[String] = []
@@ -35,6 +37,8 @@ func _ready() -> void:
 	rows[23][10] = "g"
 	rows[23][15] = "p"
 	rows[23][18] = "d"
+	rows[23][25] = "K"
+	rows[23][30] = "K"
 	level._parse("theme: 2\nmap:\n" + "\n".join(rows))
 	add_child(level)
 	level.skip_intro()
@@ -72,6 +76,7 @@ func _ready() -> void:
 	reset_guard()
 	p.position = Vector2(280,384)
 	p.crouched = true
+	g.state = WatchGuard.S.SUSPICION
 	await frames(300)
 	if not check(g.state != WatchGuard.S.CHASE and g.suspicion < .3,"crouched shadow remains undetected for 5 seconds"):
 		return
@@ -80,6 +85,40 @@ func _ready() -> void:
 	level.lights.append(Vector2(280,350))
 	await frames(90)
 	if not check(g.state == WatchGuard.S.CHASE,"standing lit target detected within 1.5 seconds"):
+		return
+	# A dozing watchman is blind even as a crouched boy crosses his near side.
+	reset_guard()
+	g.asleep = true
+	p.crouched = true
+	for tick in 60:
+		p.position = g.position + Vector2(40.0 - tick * 80.0 / 59.0, 0)
+		await frames(1)
+		if not check(g.asleep and not g.can_see(p) and g.suspicion == 0, "sleeper ignores crouched passage at 40px"):
+			return
+	g.hear(g.position + Vector2(80, 0), 130)
+	if not check(g.asleep, "quiet noise does not wake sleeper"):
+		return
+	p.position = Vector2(380,384)
+	level.throw_pebble(Vector2(175,330), Vector2(5,-80))
+	await frames(55)
+	if not check(not g.asleep and g.state in [WatchGuard.S.INVESTIGATE,WatchGuard.S.SEARCH], "real nearby pebble wakes sleeper"):
+		return
+	reset_guard()
+	p.position = g.position + Vector2(60,0)
+	p.crouched = true
+	level.lights.clear()
+	await frames(90)
+	if not check(g.state == WatchGuard.S.CHASE, "crouched dark target at 60px spotted within 1.5 seconds"):
+		return
+	reset_guard()
+	p.position = Vector2(380,384)
+	await frames(2)
+	var end_position := g.position
+	await frames(100)
+	if not check(g.pause > 0 and g.position.distance_to(end_position) < 1 and g.waypoint == 0, "patrol pauses at end for at least 1.7 seconds"):
+		return
+	await frames(65)
+	if not check(g.waypoint == 1 and g.position.x > end_position.x + 5, "patrol resumes after end pause"):
 		return
 	# Real arcing projectile lands; guard hears its actual contact position, searches, returns home.
 	level.lights.clear()
@@ -171,7 +210,18 @@ func _ready() -> void:
 	level.flags = {"escape_route":"drain"}
 	StoryState.flags["slice_test_committed"] = true
 	p.pebbles = 2
-	level.capture_checkpoint(p.position)
+	g.asleep = true
+	g.pause = 1.2
+	p.position = Vector2(408,384)
+	await frames(2)
+	if not check(level.checkpoint_state.data.spawn == Vector2(408,384), "first automatic checkpoint fires"):
+		return
+	p.position = Vector2(488,384)
+	await frames(2)
+	if not check(level.checkpoint_state.data.spawn == Vector2(488,384), "latest automatic checkpoint replaces earlier one"):
+		return
+	g.asleep = false
+	g.pause = 0
 	p.pebbles = 0
 	loot.used = true
 	level.interactables[1].used = true
@@ -183,10 +233,13 @@ func _ready() -> void:
 	p.set_physics_process(true)
 	await frames(105)
 	p.set_physics_process(false)
-	if not check(level.caught_count == 1 and p.position.distance_to(Vector2(80,384))<2,"caught struggle expires into checkpoint restore"):
+	if not check(level.caught_count == 1 and p.position.distance_to(Vector2(488,384))<2,"caught restores latest automatic checkpoint, not cell"):
 		return
 	if not check(g.position.distance_to(Vector2(168,384))<2 and g.state == WatchGuard.S.PATROL and not loot.used and not level.interactables[1].used and p.carried == "" and p.pebbles == 2,"checkpoint resets guards, loot, door, carry"):
 		return
+	if not check(g.asleep and is_equal_approx(g.pause, 1.2), "checkpoint restores asleep and patrol pause"):
+		return
+	g.asleep = false
 	if not check(StoryState.flags.get("slice_test_committed",false) and level.flags.escape_route == "drain","restore preserves committed decisions"):
 		return
 	await frames(2)
@@ -231,5 +284,5 @@ func _ready() -> void:
 	Input.action_release("attack")
 	if not check(p.state == RennController.S.MOVE and p.break_used and g.state == WatchGuard.S.STAGGER,"one guard permits a single shove struggle"):
 		return
-	print("MECHANICS OK slice slide walls floors shadow(5s) light pebble-count cap rusted-drain hook-vent guard-name return shove steal caught checkpoint flags shout two-guards struggle")
+	print("MECHANICS OK slice sleeper pebble-wake close-dark end-pause auto-checkpoints asleep-restore slide walls floors shadow(5s) light pebble-count cap rusted-drain hook-vent guard-name return shove steal caught checkpoint flags shout two-guards struggle")
 	get_tree().quit()

@@ -18,6 +18,9 @@ var off_balance := false
 var sprite: AnimatedSprite2D
 var bark := ""
 var bark_time := 0.0
+var asleep := false       # dozing at his post: blind, and only loud noises wake him
+var pause := 0.0          # standing still at a patrol end, looking out
+const END_PAUSE := 2.2
 
 func _ready() -> void:
 	collision_layer = 4
@@ -47,6 +50,8 @@ func enter(next: S) -> void:
 		level.shout(self, last_known)
 
 func can_see(p: Node2D) -> bool:
+	if asleep:
+		return false
 	var eye := position + Vector2(0, -35)
 	var target := p.position + Vector2(0, -12 if p.crouched else -28)
 	var offset := target - eye
@@ -56,25 +61,32 @@ func can_see(p: Node2D) -> bool:
 
 func detection_rate(p: Node2D) -> float:
 	var lit: float = level.light_at(p.position + Vector2(0, -24))
+	var dist := position.distance_to(p.position)
 	# fair for a first-timer: ~3 s to spot a boy standing in shadow, ~1 s in lantern light, slower far away
 	var rate := .25 + lit * .9
-	rate *= lerpf(1.3, .55, clampf(position.distance_to(p.position) / 245.0, 0, 1))
+	rate *= lerpf(1.3, .55, clampf(dist / 245.0, 0, 1))
 	if p.crouched and lit < .3:
-		rate = .025
+		rate = .025      # crouched in the dark: invisible at a distance...
 	elif p.crouched:
 		rate *= .35
 	if absf(p.velocity.x) > 80:
 		rate *= 1.4
-	if position.distance_to(p.position) < 65:
-		rate *= 2
+	# ...but nobody is invisible right under a man's nose: up close he spots you within about a second
+	if dist < 110:
+		rate = maxf(rate, lerpf(1.6, .1, clampf((dist - 40.0) / 70.0, 0, 1)))
 	return rate
+
 
 func hear(spot: Vector2, radius: float) -> void:
 	if state in [S.CHASE, S.STAGGER] or position.distance_to(spot) > radius:
 		return
 	var strength := 1.0 - position.distance_to(spot) / radius
-	if strength < .12:
+	if strength < (.45 if asleep else .12):
 		return
+	if asleep:
+		asleep = false
+		bark = "Wha— who's there?"
+		bark_time = 2.5
 	last_known = spot
 	suspicion = maxf(suspicion, .3)
 	enter(S.INVESTIGATE)
@@ -99,6 +111,13 @@ func shove(p: Node2D) -> bool:
 func _physics_process(delta: float) -> void:
 	timer += delta
 	bark_time = maxf(0, bark_time - delta)
+	if asleep:
+		velocity.x = 0
+		velocity.y = minf(540, velocity.y + 1250 * delta)
+		move_and_slide()
+		sprite.stop()
+		queue_redraw()
+		return
 	var p: Node2D = level.renn
 	var sees := p != null and can_see(p)
 	if sees and state != S.STAGGER:
@@ -119,8 +138,14 @@ func _physics_process(delta: float) -> void:
 	match state:
 		S.PATROL:
 			goal = patrol[waypoint]
-			if absf(goal.x - position.x) < 6:
-				waypoint = (waypoint + 1) % patrol.size()
+			if pause > 0:
+				# stand at the end of the beat looking out; this is the player's window
+				pause -= delta
+				goal = position
+				if pause <= 0:
+					waypoint = (waypoint + 1) % patrol.size()
+			elif absf(goal.x - position.x) < 6:
+				pause = END_PAUSE
 		S.SUSPICION:
 			if not sees and timer > 1:
 				enter(S.INVESTIGATE)
@@ -163,6 +188,11 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if asleep:
+		var t := fmod(Time.get_ticks_msec() / 1000.0, 2.0)
+		draw_string(Game.ui_font, Vector2(6 + t * 4, -58 - t * 6), "z", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.8,.85,1,1 - t/2))
+		draw_string(Game.ui_font, Vector2(12 + t * 3, -66 - t * 5), "Z", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(.8,.85,1,.8 - t/3))
+		return
 	# Ray-clipped fan: the visible cone ends at the same walls as perception.
 	var eye := Vector2(0, -35)
 	var fan := PackedVector2Array([eye])

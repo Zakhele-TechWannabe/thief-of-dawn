@@ -39,7 +39,9 @@ done
 run_check 'MECHANICS OK' --headless --fixed-fps 60 --path . tests/mechanics.tscn
 run_check 'SMOKE OK' --headless --fixed-fps 60 --path . -- --slice --smoke=1800
 for route in tests/slice_routes/*.seq; do
-    run_check 'ROUTE OK' --headless --fixed-fps 60 --path . -- --slice --route="$route"
+    for offset in -15 0 15; do
+        run_check 'ROUTE OK' --headless --fixed-fps 60 --path . -- --slice --route="$route" --route_offset="$offset"
+    done
 done
 run_check 'MECHANICS OK' --headless --fixed-fps 60 --path . tests/slice_mechanics.tscn
 run_check 'FAIRNESS' --headless --fixed-fps 60 --path . tests/slice_fairness.tscn

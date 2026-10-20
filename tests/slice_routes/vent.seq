@@ -1,38 +1,53 @@
+# Climb to the vent, stop and work the hinge.
 0+move_right
 24+jump
 60-jump
 200-move_right
 210+slice_interact
 345-slice_interact
-350+move_right
-390+jump
-430-jump
-435+attack
-436-attack
-460+attack
-461-attack
-630-move_right
-630+move_left
-631+attack
-632-attack
-633-move_left
-633+move_right
-670+jump
-710-jump
-760+jump
-800-jump
-825+jump
-865-jump
-945+jump
-965+attack
-966-attack
-985-jump
-1030+attack
-1031-attack
-1050+jump
-1090-jump
-1185+jump
-1225-jump
-1265-move_right
-1270+up
-1271-up
+# Crouch past the sleeping watchman.
+350+down
+352+move_right
+# Jump onto the rafters before reaching the patrol; creep across overhead.
+560-down
+562+jump
+600-jump
+640-move_right
+642+down
+643+move_right
+704-down
+705+move_right
+# Crouch during the yard descent; stop on the dark drying beams.
+742+down
+780-move_right
+# The guards have turned away. Creep to the deck edge and drop behind Hadrik.
+900+move_right
+1038-move_right
+1038+attack
+1039-attack
+# Leave the rail and climb the lower roofs.
+1080-down
+1080+move_right
+1090+jump
+1130-jump
+1180+jump
+1220-jump
+1245+jump
+1285-jump
+# Jump to the roof rafters, stop and observe, then creep above the lantern watch.
+1340+jump
+1380-jump
+1380-move_right
+1382+down
+1440+move_right
+# Pause before leaving the roof deck; cross the last roofs and stop at the exit.
+1560-move_right
+1560-down
+1590+move_right
+1630+jump
+1670-jump
+1720+jump
+1760-jump
+1789-move_right
+1840+up
+1841-up

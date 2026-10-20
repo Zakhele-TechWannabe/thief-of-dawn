@@ -5,7 +5,7 @@ var data := {}
 func capture(level: Node2D, spawn: Vector2) -> void:
 	var guards := []
 	for g in level.guards:
-		guards.append([g.position, g.state, g.facing, g.suspicion, g.last_known, g.waypoint, g.timer, g.off_balance])
+		guards.append([g.position, g.state, g.facing, g.suspicion, g.last_known, g.waypoint, g.timer, g.off_balance, g.asleep, g.pause])
 	var items := []
 	for item in level.interactables:
 		items.append(item.used)
@@ -25,6 +25,8 @@ func restore(level: Node2D) -> void:
 		g.waypoint = s[5]
 		g.timer = s[6]
 		g.off_balance = s[7]
+		g.asleep = s[8] if s.size() > 8 else false
+		g.pause = s[9] if s.size() > 9 else 0.0
 		g.velocity = Vector2.ZERO
 		g.bark_time = 0
 	for i in level.interactables.size():

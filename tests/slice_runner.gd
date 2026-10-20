@@ -3,6 +3,8 @@ extends Node
 var level: SliceLevel
 var args := {}
 var done := false
+var offset_start := -1
+var previous_sides := {}
 func _ready() -> void:
 	level.completed.connect(func(): done = true)
 	call_deferred("run")
@@ -21,11 +23,22 @@ func run() -> void:
 					fail("invalid sequence " + step)
 					return
 				var f := int(m.get_string(1))
+				# First release of horizontal movement begins the first observation/work wait.
+				if m.get_string(2) == "-" and m.get_string(3) in ["move_left", "move_right"]:
+					offset_start = f if offset_start < 0 else mini(offset_start, f)
 				last = maxi(last,f)
 				seq[f] = seq.get(f,[]) + [[m.get_string(2)=="+",m.get_string(3)]]
 		if seq.is_empty():
 			fail("empty sequence")
 			return
+		# Apply after parsing: sequence lines need not be in chronological order.
+		var shifted := {}
+		last = 0
+		for frame in seq:
+			var shifted_frame: int = frame + (int(args.get("route_offset", "0")) if offset_start >= 0 and frame > offset_start else 0)
+			shifted[shifted_frame] = shifted.get(shifted_frame, []) + seq[frame]
+			last = maxi(last, shifted_frame)
+		seq = shifted
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 3
 	for i in range(int(args.get("smoke","1800")) if smoke else last+181):
@@ -43,20 +56,35 @@ func run() -> void:
 			await RenderingServer.frame_post_draw
 			get_viewport().get_texture().get_image().save_png("%s/slice_%05d.png" % [args.get("shotdir", "/tmp"), i])
 		if args.has("trace") and i%int(args.trace)==0:
+			print("  velocity=",level.renn.velocity," crouch=",level.renn.crouched)
 			print("SLICE frame=%d pos=%s state=%s flags=%s caught=%d" % [i,level.renn.position,level.renn.state,level.flags,level.caught_count])
 			for g in level.guards:
-				print("  guard ", g.position, " state=",g.state," face=",g.facing," suspicion=",g.suspicion," hadrik=",g.hadrik," rail=",level.railing)
+				print("  guard ", g.position, " state=",g.state," face=",g.facing," suspicion=",g.suspicion," target=",g.last_known," hadrik=",g.hadrik," rail=",level.railing)
 		if not level.renn.position.is_finite():
 			fail("non-finite position")
+			return
+		if not smoke:
+			for guard in level.guards:
+				var relative: Vector2 = level.renn.position - guard.position
+				var previous: float = previous_sides.get(guard, relative.x)
+				if not guard.asleep and guard.state != WatchGuard.S.STAGGER and previous < 0 and relative.x >= 0 and relative.y < 0 and relative.y > -110 and not level.renn.is_on_floor():
+					fail("jumped across a guard without landing on overhead cover at frame %d" % i)
+					return
+				previous_sides[guard] = relative.x
+				if not guard.asleep and guard.state != WatchGuard.S.STAGGER and relative.x * guard.facing > 0 and absf(relative.x) < 60 and absf(relative.y) < 40:
+					fail("within 60px in front of facing guard at frame %d" % i)
+					return
+		if not smoke and level.caught_count > 0:
+			fail("caught during route")
 			return
 		if done and not smoke:
 			var expected := String(args.route).get_file().get_basename()
 			if level.flags.get("escape_route", "") != expected:
 				fail("wrong escape route")
 				return
-			print("ROUTE OK slice=%s frames=%d caught=%d" % [level.flags.get("escape_route","none"),i,level.caught_count])
+			print("ROUTE OK slice=%s frames=%d caught=%d offset=%s" % [level.flags.get("escape_route","none"),i,level.caught_count,args.get("route_offset","0")])
 			for g in level.guards:
-				print("  guard ", g.position, " state=",g.state," face=",g.facing," suspicion=",g.suspicion," hadrik=",g.hadrik," rail=",level.railing)
+				print("  guard ", g.position, " state=",g.state," face=",g.facing," suspicion=",g.suspicion," target=",g.last_known," hadrik=",g.hadrik," rail=",level.railing)
 			get_tree().quit()
 			return
 	if smoke:
