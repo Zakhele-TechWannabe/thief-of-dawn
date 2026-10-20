@@ -1,127 +1,91 @@
-# Story direction: the thief of the Era of Dawn
+# Story direction
 
-A review of the proposed new story for *Thief of Dawn* (an ordinary thief in Year 320, told across his life),
-with a recommendation for how to turn it into a game that ships. Status: **proposal, not yet decided.**
+The agreed direction for *Thief of Dawn*, what is still open, and review notes on the current design.
+The full design is [`STORY_AND_GAME_DESIGN_V1.md`](STORY_AND_GAME_DESIGN_V1.md). Where the two differ, this
+document records the decision.
+
+> **Guiding principle:** *Thief of Dawn* is the story of an ordinary criminal whose life matters to the people
+> around him, even if it never matters to history.
+
+> **North star:** At fifteen he breaks out of a cell to save himself. At thirty he breaks into one knowing he
+> could run instead.
+
+Nothing here is Umbraverse canon. Every new person, place and event stays **draft** in the lore sheet until
+approved one by one.
 
 ---
 
-## 1. The proposal in brief
+## 1. Agreed
 
-- A teenage petty thief (about 15) in **Year 320**, late in the Era of Dawn. All five human settlements exist;
-  the Era of Expansion is 180 years away.
-- He is a real thief: he steals to survive, because he can, and because he wants things. He lies and may abandon
-  people. Not cruel, not heroic, and given no noble justification.
-- He is imprisoned, escapes with no destination, and flees into a forest where he meets the **Verdans**, whose
-  attitude to humans is undecided.
-- He **cannot read**, is impulsive and distrustful, and is better at running than fighting.
-- The game was proposed as **chapters across his life**: The Boy (about 15), The Wanderer (late teens), The Crew
-  (twenties, five thieves who drift together), The Man (adulthood).
-- The five thieves might leave habits and folklore behind that later Umbraverse stories could trace back.
-
-## 2. What is strong (keep it)
-
-| Idea | Why it works |
+| Element | Decision |
 |---|---|
-| A thief who is actually a thief | Rarer and more honest than the noble rogue. It also makes the title true: *Thief of Dawn* = a thief in the **Era of Dawn**. The current hero, Kael, isn't a thief at all |
-| Year 320 | The history between Year 250 (Sarath founded) and Year 500 is empty, so the world can be invented without contradicting canon |
-| The Verdan forest | A race whose relationship to humans is undecided, met by someone who can't read their signs: an eerie, memorable set piece |
-| He can't read | A rare chance to make the player *feel* a character's limitation, if the game shows it (see 4.5) |
-| Five thieves, remembered distorted centuries later | A link between stories that doesn't make him historically famous. Keep it as a seed |
+| Setting | Umbraverse, Era of Dawn, starting around Year 320. Later institutions (Grand Library, Order of the Shield, Grand Festival, Council of Five) don't exist yet |
+| Protagonist | **Renn**, a Norran human, 15 in Year 320, a genuine petty thief. Guilty, not framed |
+| Family | Yes: mother Ilen, father Boran, sister Nera. He loves them and still chooses himself |
+| Backstory | Develop his childhood and the local history that shaped it (Slateford, Years 285–320), not fifty years of exposition |
+| Initial conflict | Caught stealing, imprisoned, escapes with no destination |
+| Motivation | Immediate survival and self-interest. No grand objective |
+| Stakes | Small and concrete: his escape forfeits the rope frame his mother pledged. He knows, and runs anyway |
+| Pursuer | Small and personal: **Hadrik**, a local watchman whose pride Renn hurt. Finite reach, not a villain |
+| Rejected | A mysterious stolen artefact; a powerful antagonist; FATE Marks; prophecy; chosen-one destiny; a famous guild |
+| First non-humans | Verdans (Telu, Greenwake). Unplanned from Renn's side; a *local* relationship, not a species-wide one |
+| Combat | Improvised and dirty alongside evasion: shove, kick, throw, grab a weapon. Trained guards are dangerous |
+| Illiteracy | A real mechanic. The UI stays readable; in-world writing is what Renn can't use |
+| Choices | A handful of remembered flags that change dialogue, routes and epilogues. No branching chapters, no morality meter |
+| First arc | Chapter I is a complete story with its own ending, built and playtested before anything else |
+| Longer arc | Follow him across his life (four chapters, Years 320–335), developed progressively rather than scripted in full |
+| Existing Godot game | Kept as the technical prototype. Kael's story, Morrow, the Lantern, FATE Marks and shades are retired from this narrative |
 
-## 3. What is weak
+## 2. Open
 
-1. **Nothing is happening yet.** There's no want, no opponent and no stakes. "Trying not to get caught" carries
-   one escape sequence, not a game. Every decision so far has been deferred ("we haven't decided", "possible
-   histories"). Keeping options open is useful for a short time; past that, the story stalls.
-2. **A life told across decades doesn't suit a platformer.** Each chapter needs its own reason to keep playing
-   and its own art: the same man at four ages means four sets of character sprites (Kael at one age cost about
-   $0.70 of PixelLab art). Time-skip life stories work in novels and RPGs; in a platformer they tend to become a
-   game that never ships.
-3. **A morally grey lead needs a hook.** A selfish protagonist only holds a player if he is competent, funny,
-   vulnerable, or wants something specific. "Survival" isn't a want.
-4. **It changes the game, and that hasn't been stated.** "Better at running than fighting" turns the current
-   action game (combo, parry, sword duels) into a chase and evasion game. That may be the better game, but it is
-   a decision with real consequences (see section 6).
-5. **"He can't read" is only worth it if the player experiences it.** As a line in his biography it does nothing.
+- Exactly how his family's loss lands on him over time. It gives him something to lose; it doesn't guarantee he
+  does the right thing. Does he go back, help, tell himself they're better off, or not care enough to risk it?
+- Whether Hadrik reappears after Chapter I (see 3.3).
+- How much the Greenwake Verdans know about humans, and their local signs and language.
+- Slateford's governance and law (who judges, how restitution works).
+- Which relationships survive the player's choices into the epilogue.
+- Names, the exact theft, partner dialogue and stage counts per chapter: free to change in writing and playtests.
 
-## 4. Recommendation
+## 3. Review notes on design version 1
 
-### 4.1 Make "The Boy" the whole game
-One chapter, one age, one set of character art. The Wanderer, The Crew and The Man become the potential for a
-series, not the plan for this game. If the first game works, the later chapters are sequels with a reason to exist.
+### 3.1 Strong: keep as written
+- The pledged rope frame: a small, concrete cost he chooses to pay with someone else's livelihood.
+- Telu and the water system, misread in Chapter I and understood in Chapter II: illiteracy and ignorance as plot,
+  not description.
+- Iri catching a written fraud by counting goods instead of reading.
+- Chapter IV mirroring Chapter I (breaking into a cell instead of out), Nera refusing his money, the knot on the
+  branch.
+- The milestone plan: a 20–30 minute vertical slice first, then Chapter I complete, before any later chapter.
 
-### 4.2 Give chapter one an engine
-Three concrete elements give the story levels, a villain and choices, without making him a hero:
+### 3.2 Scope and time estimates are inflated
+- 15–20 hours across 22 stages assumes 25–45 minutes per stage. Platformer stages usually run 5–15 minutes, so
+  the estimate either pads stages or overstates the game's length. Treat stage count as the plan and **measure**
+  playtime in playtests instead of promising hours.
+- Realistic Chapter I: six stages, roughly **1–1.5 hours** of play.
+- Art: Renn at three ages plus Iri, Deka, Suli, Orven, Hadrik, Telu, the family and guards is several times the
+  art bought so far. Budget it per chapter, not up front.
 
-- **Something he stole that he shouldn't have.** He was arrested for a small theft, but among what he took is
-  an object someone powerful wants back. He doesn't know what it is (he can't read the mark on it). It must not
-  turn into a chosen-one artefact: its value is to *its owner*, not to fate.
-- **A pursuer who doesn't stop.** A specific person (a hired tracker, a settlement's enforcer, the owner's
-  agent) who follows him from the prison through the countryside and toward the forest. That gives the levels
-  direction and a climax.
-- **A cellmate.** Someone he escapes with, who is useful, who slows him down, and whom he can betray at a key
-  moment. The player's choice there is the moral centre of the game, and its consequence carries into the ending.
+### 3.3 Hadrik's choice needs a payoff
+In V1 his role ends in Chapter I and the bridge choice only reaches the epilogue. Proposal: in Chapter IV, Renn
+breaks into **Slateford's** holding cells, so Hadrik should be there, fifteen years older and perhaps in charge.
+Whether Renn pulled him off the bridge or left him shapes how the break-in goes. Consequence at an insignificant
+scale, which is the premise. *(Open: needs the author's yes.)*
 
-### 4.3 Answer these first, in this order
-1. **What does he want in chapter one?** (To get away with the stolen thing? To sell it? To get back to
-   someone? To get rid of it once he understands the danger?)
-2. **Who is chasing him, and why won't they stop?**
-3. **Who escapes with him?**
-4. Where he grew up: a smaller, poorer settlement on the edge of human lands, as proposed, so the history of
-   Years 270–320 can be built without rewriting the five founding cities.
+### 3.4 Chapter IV forces the virtuous choice
+The design says "limited growth, not moral purification", but Chapter IV's plot obliges Renn to find another
+route and then, at the climax, to refuse the family-yard exit. Every Chapter IV beat leans the same way, which
+is a redemption arc in practice. Either make it a choice (the yard exit is possible, with `nera_boundary_respected`
+recording what he did) or accept the redemption and say so. *(Open.)*
 
-### 4.4 Decide the play style now
-| Option | What it means | What changes in the current game |
-|---|---|---|
-| **A. Evasion** (recommended for this story) | Running, hiding, climbing, distractions, traps turned on pursuers; fights are rare and dangerous | Movement, ledges, levels, lighting and the level format stay. Combat shrinks to a desperate shove/stab; enemies become guards with sight cones and chases; new art for the boy and the guards |
-| **B. Keep sword combat** | The boy fights like Kael | Contradicts "better at running than fighting"; least work, weakest fit |
+### 3.5 Deka arrives too late to carry the ending
+Chapter IV depends on caring whether Deka gets out, but he is introduced in Chapter III alongside two others.
+Introduce him in Chapter II (a job before Iri's, or the room above the road is his workshop).
 
-### 4.5 Make illiteracy a mechanic
-Signs, notices and Verdan markings appear as **unreadable scribbles** the player sees exactly as he does. Meaning
-comes from pictures, context and other people, and sometimes he gets it wrong. One or two moments where
-misreading a sign has a cost will say more than any narration.
+## 4. Next step
 
-### 4.6 Keep the long-term ideas as seeds only
-Record the five thieves and their later folklore in the lore sheet as **draft** (see section 7), so they're
-available to later stories without obliging this one to set them up.
+**Milestone 1, the playable thief** (design §12): one holding cell, a short yard and a rooftop exit. New Renn
+sprite (age 15), one guard with readable patrol, suspicion, investigation and chase states, climb, slide, shove
+and throw, one theft interaction, checkpoint. Built on the current Godot engine.
 
-## 5. Suggested shape of the game (if A is chosen)
-
-Five levels, one continuous flight, about a week of his life:
-
-1. **The holding cells** of his settlement: escape with the cellmate (teaches climbing, hiding, timing).
-2. **The streets and rooftops** on the way out, guards searching (chases, rooftop routes, distractions).
-3. **Open country**: farmland, ditches, an abandoned mill; the pursuer first appears in person.
-4. **The forest edge**: the cellmate decision; the pursuer closes in.
-5. **The Verdan forest**: an unknown place with unreadable signs and a confrontation in which the stolen object,
-   the pursuer and the Verdans meet. How it ends depends on the choice in level 4.
-
-## 6. What happens to the current game
-
-| Part | Keeps | Changes |
-|---|---|---|
-| Engine (movement, ledges, camera, lighting, HUD, level format, tests) | Everything | — |
-| Combat (combo, parry, roll) | Roll becomes a dodge/slide | Combo and parry shrink or go |
-| Kael art | Can stay as a possible NPC (a young Order of the Shield squire is impossible in Year 320: the Order is founded in Year 1650) | A new protagonist (the boy) needs new sprites |
-| Shades (Tenebri) | Can appear later or not at all | Main enemies become human guards and the pursuer |
-| Levels 1–2 (Thalor vaults, Norra mines) | The building techniques and art | The Year 320 settlements are younger and smaller; the Grand Library (Year 1500) doesn't exist yet |
-| Story, FATE Marks, Morrow, the Lantern | — | Replaced. The FATE Marks could return as something subtler or not at all |
-
-Note: almost all of the current story is set around Year 2100 (Grand Festival 1600, Order of the Shield 1650,
-Council of Five 2000). Moving to Year 320 means none of those institutions exist yet. That's a fresh start, not
-an adaptation.
-
-## 7. Lore to add to the sheet (all as draft)
-
-- **Era:** the period Years 270–320 needs events: settlement growth, land pressure, a bad harvest, displacement.
-  Pick causes before declaring that society is unequal.
-- **Entities:** the protagonist, the cellmate, the pursuer, the owner of the stolen object, his home settlement,
-  the forest, the holding cells.
-- **Verdans in Year 320:** decide (or deliberately leave unknown) whether they have met humans before.
-- **The five thieves:** a draft Faction with no members yet.
-
-## 8. Next decisions (yours)
-
-1. Option A (evasion) or B (combat)?
-2. His want, his pursuer and his cellmate (section 4.3).
-3. Keep Kael's game as a separate project, shelve it, or replace it?
+**Passes when** a new player escapes without a wall of tutorial text, using more than one route, and knows Renn
+is guilty.
