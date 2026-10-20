@@ -1,8 +1,8 @@
 # Story direction
 
-The agreed direction for *Thief of Dawn*, what is still open, and review notes on the current design.
-The full design is [`STORY_AND_GAME_DESIGN_V1.md`](STORY_AND_GAME_DESIGN_V1.md). Where the two differ, this
-document records the decision.
+The agreed direction for *Thief of Dawn*. The full design is
+[`STORY_AND_GAME_DESIGN_V1.md`](STORY_AND_GAME_DESIGN_V1.md); it stays unchanged as the source.
+**Where the two differ, this document is the decision** (section 2 lists every override).
 
 > **Guiding principle:** *Thief of Dawn* is the story of an ordinary criminal whose life matters to the people
 > around him, even if it never matters to history.
@@ -11,7 +11,7 @@ document records the decision.
 > could run instead.
 
 Nothing here is Umbraverse canon. Every new person, place and event stays **draft** in the lore sheet until
-approved one by one.
+approved one by one. The Godot implementation is not to be changed for this direction yet.
 
 ---
 
@@ -19,73 +19,93 @@ approved one by one.
 
 | Element | Decision |
 |---|---|
-| Setting | Umbraverse, Era of Dawn, starting around Year 320. Later institutions (Grand Library, Order of the Shield, Grand Festival, Council of Five) don't exist yet |
-| Protagonist | **Renn**, a Norran human, 15 in Year 320, a genuine petty thief. Guilty, not framed |
-| Family | Yes: mother Ilen, father Boran, sister Nera. He loves them and still chooses himself |
-| Backstory | Develop his childhood and the local history that shaped it (Slateford, Years 285–320), not fifty years of exposition |
-| Initial conflict | Caught stealing, imprisoned, escapes with no destination |
-| Motivation | Immediate survival and self-interest. No grand objective |
-| Stakes | Small and concrete: his escape forfeits the rope frame his mother pledged. He knows, and runs anyway |
-| Pursuer | Small and personal: **Hadrik**, a local watchman whose pride Renn hurt. Finite reach, not a villain |
-| Rejected | A mysterious stolen artefact; a powerful antagonist; FATE Marks; prophecy; chosen-one destiny; a famous guild |
-| First non-humans | Verdans (Telu, Greenwake). Unplanned from Renn's side; a *local* relationship, not a species-wide one |
-| Combat | Improvised and dirty alongside evasion: shove, kick, throw, grab a weapon. Trained guards are dangerous |
-| Illiteracy | A real mechanic. The UI stays readable; in-world writing is what Renn can't use |
-| Choices | A handful of remembered flags that change dialogue, routes and epilogues. No branching chapters, no morality meter |
-| First arc | Chapter I is a complete story with its own ending, built and playtested before anything else |
-| Longer arc | Follow him across his life (four chapters, Years 320–335), developed progressively rather than scripted in full |
-| Existing Godot game | Kept as the technical prototype. Kael's story, Morrow, the Lantern, FATE Marks and shades are retired from this narrative |
+| Creative direction | A long-form, multi-chapter game following one life: four chapters, Years 320, 324, 329 and 335. Not reduced to a single chapter for ease of shipping |
+| First production milestone | **Chapter I, complete and self-contained**: a full narrative arc with its own ending, built and playtested before work on later chapters |
+| Setting | Umbraverse, Era of Dawn. Later institutions (Grand Library, Order of the Shield, Grand Festival, Council of Five) don't exist yet |
+| Protagonist | **Renn**, a Norran human from Slateford, 15 in Year 320, a genuine petty thief. Guilty, not framed |
+| Family | Mother Ilen, father Boran, sister Nera. He loves them and still chooses himself |
+| Stakes | Small and concrete: his escape forfeits the rope frame Ilen pledged. He knows, and runs anyway |
+| Pursuer | **Hadrik**, a local watchman whose pride Renn hurt. Finite reach, not a villain. **Returns in Chapter IV** (3.1) |
+| First non-humans | Verdans: Telu and the Greenwake community. A *local* relationship, not a species-wide one |
+| Combat | Improvised and dirty alongside evasion. Trained guards are dangerous; two are frightening |
+| Illiteracy | A real mechanic. UI and subtitles stay readable; in-world writing is what Renn can't use |
+| Choices | Small named flags with **persistent** consequences in dialogue, routes, characters and epilogues. No separate campaigns, no branching chapters, no morality meter |
+| Character arc | **No guaranteed redemption.** Growth is possible but not required: the player's choices decide how far it goes (3.3) |
+| Crew | Five people who drift together without founding a guild. Roles and peoples follow from the story, not a checklist (3.2) |
+| Rejected | A mysterious stolen artefact; a powerful antagonist; FATE Marks; prophecy; chosen-one destiny; a famous guild; an ethnicity-per-member crew |
+| Existing Godot game | Kept as the technical prototype; Kael's story, Morrow, the Lantern, FATE Marks and shades are retired from this narrative |
 
-## 2. Open
+## 2. Overrides to design V1
 
-- Exactly how his family's loss lands on him over time. It gives him something to lose; it doesn't guarantee he
-  does the right thing. Does he go back, help, tell himself they're better off, or not care enough to risk it?
-- Whether Hadrik reappears after Chapter I (see 3.3).
-- How much the Greenwake Verdans know about humans, and their local signs and language.
-- Slateford's governance and law (who judges, how restitution works).
-- Which relationships survive the player's choices into the epilogue.
-- Names, the exact theft, partner dialogue and stage counts per chapter: free to change in writing and playtests.
+| V1 says | Decision now |
+|---|---|
+| "Target 15–20 hours of main story"; chapter targets of 3–4, 3–4, 5–6 and 4–6 hours; Chapter I stages "25–45 minutes each" | **Removed.** No playtime targets until there is playtest data |
+| 22 authored stages; 6 / 5 / 6 / 5 per chapter | **Provisional.** The stage map is a content plan; counts change with playtesting |
+| Hadrik: "His role ends in Chapter I; later appearances, if any, are local and conditional" | **He returns in Chapter IV** (3.1), so he survives Chapter I whatever Renn chooses |
+| Deka is introduced in Chapter III (stage 12) | **Introduced in Chapter II** (3.2) |
+| The crew: a Thalorian, a Norran, a Dornith and a Valerin alongside Renn | **Peoples and roles are open** and follow from where the crew operates and what the jobs need (3.2) |
+| Chapter IV: "the central plot obliges him to find another route"; at the climax "Renn instead chooses a slower flooded service channel" | **A real choice.** The family-yard exit can be taken, with lasting consequences (3.3) |
+| Ending: "The boy who always ran away has become a man who sometimes returns"; "the last button press takes him toward his companions" | **Depends on the player's choices.** The ending resolves in every version but doesn't assume he has changed (3.3) |
+| Milestone 1 (the 20–30-minute vertical slice) as the first milestone | The vertical slice becomes the **first internal step** of the first milestone, Chapter I complete |
 
-## 3. Review notes on design version 1
+## 3. Decisions in detail
 
-### 3.1 Strong: keep as written
-- The pledged rope frame: a small, concrete cost he chooses to pay with someone else's livelihood.
-- Telu and the water system, misread in Chapter I and understood in Chapter II: illiteracy and ignorance as plot,
-  not description.
-- Iri catching a written fraud by counting goods instead of reading.
-- Chapter IV mirroring Chapter I (breaking into a cell instead of out), Nera refusing his money, the knot on the
-  branch.
-- The milestone plan: a 20–30 minute vertical slice first, then Chapter I complete, before any later chapter.
+### 3.1 Hadrik returns in Chapter IV
+Fifteen years after the escape, Hadrik is still in Slateford's watch and now **runs the holding cells** Renn must
+break into to free Deka. He survives Chapter I in every version: if Renn leaves him at the bridge, Telu's
+community gets him out, as V1 already allows.
 
-### 3.2 Scope and time estimates are inflated
-- 15–20 hours across 22 stages assumes 25–45 minutes per stage. Platformer stages usually run 5–15 minutes, so
-  the estimate either pads stages or overstates the game's length. Treat stage count as the plan and **measure**
-  playtime in playtests instead of promising hours.
-- Realistic Chapter I: six stages, roughly **1–1.5 hours** of play.
-- Art: Renn at three ages plus Iri, Deka, Suli, Orven, Hadrik, Telu, the family and guards is several times the
-  art bought so far. Budget it per chapter, not up front.
+`hadrik_helped` shapes Chapter IV:
+- **Helped:** Hadrik recognizes Renn and owes him a debt he resents. He doesn't let Renn in, but there's a moment
+  where he can look away once, or not. It's his choice; the player can't buy it.
+- **Abandoned:** Hadrik remembers being left in the rain. He has rebuilt the cells around the boy who escaped
+  them: the roof vent and drain from stage 2 are sealed, and the patrol is his own.
 
-### 3.3 Hadrik's choice needs a payoff
-In V1 his role ends in Chapter I and the bridge choice only reaches the epilogue. Proposal: in Chapter IV, Renn
-breaks into **Slateford's** holding cells, so Hadrik should be there, fifteen years older and perhaps in charge.
-Whether Renn pulled him off the bridge or left him shapes how the break-in goes. Consequence at an insignificant
-scale, which is the premise. *(Open: needs the author's yes.)*
+Both versions are playable; neither makes Hadrik a villain or a friend. *(Specifics draft.)*
 
-### 3.4 Chapter IV forces the virtuous choice
-The design says "limited growth, not moral purification", but Chapter IV's plot obliges Renn to find another
-route and then, at the climax, to refuse the family-yard exit. Every Chapter IV beat leans the same way, which
-is a redemption arc in practice. Either make it a choice (the yard exit is possible, with `nera_boundary_respected`
-recording what he did) or accept the redemption and say so. *(Open.)*
+### 3.2 The crew
+- **Deka appears in Chapter II.** Proposal: he is the wheelwright whose workshop has the room above the road
+  (stage 11). He rents it to Renn and Iri without asking questions, takes a cut of one job, and expects Renn to
+  keep the promises he makes. By Chapter III he has joined; by Chapter IV the player knows why rescuing him
+  matters. *(Proposal; open.)*
+- **No checklist of peoples.** The crew is whoever this life brings together. They operate on the roads around
+  Norra and its satellite settlements, so several are likely Norran; travellers and outsiders join because of a
+  job, not to complete a set. Each member's people, and the order and reason they join, are open.
+- Roles stay as V1 describes them (a reader and record-forger, someone who knows mechanisms, someone who works
+  crowds, someone who can fight) unless the story needs otherwise.
 
-### 3.5 Deka arrives too late to carry the ending
-Chapter IV depends on caring whether Deka gets out, but he is introduced in Chapter III alongside two others.
-Introduce him in Chapter II (a job before Iri's, or the room above the road is his workshop).
+### 3.3 No guaranteed redemption
+- **Chapter IV, the family yard (stage 19).** Nera refuses to let him use the workshop. Renn can respect that or
+  go behind her back. Neither is forced.
+- **The climax (stage 22).** The family-yard exit opens. Taking it is faster and safer for the crew and exposes
+  Nera's workshop: the family pays a second time, and `nera_boundary_respected` is false. Refusing it means the
+  flooded service channel, a harder escape and a lost stash.
+- **The ending resolves in every version.** Deka is out (or the attempt's cost is shown), the family scene
+  happens, and Renn leaves. What the scene says depends on what he did: Nera may close the door; Ilen may still
+  speak to him; the knot on the branch may be a signal to companions waiting for him, or a habit with no one to
+  read it. He remains a thief in all of them.
+- The same principle applies earlier: the wage money in Chapter III (`worker_wages_restored`), Telu's tool
+  (`telu_tool_returned`), Hadrik at the bridge (`hadrik_helped`). Each is a credible trade-off, not a test with a
+  right answer.
 
-## 4. Next step
+### 3.4 Choices persist without separate campaigns
+- A small set of named flags (V1 §7.5), committed at chapter saves and never undone by a level death.
+- A flag can change dialogue, a route, a secondary character's fate, how a returning place looks, or an epilogue.
+- No flag creates a different chapter. Every player plays the same four chapters and the same stages; what
+  differs is who remembers what, and how it lands.
 
-**Milestone 1, the playable thief** (design §12): one holding cell, a short yard and a rooftop exit. New Renn
-sprite (age 15), one guard with readable patrol, suspicion, investigation and chase states, climb, slide, shove
-and throw, one theft interaction, checkpoint. Built on the current Godot engine.
+## 4. Still open
+- How his family's loss weighs on him across the years (it gives him something to lose; it doesn't make him a
+  devoted son).
+- The Greenwake Verdans: how much they know about humans; their local signs and language.
+- Slateford's governance and law (who judges, how restitution and pledges work).
+- The crew's peoples, order of joining, and which partnerships survive into Chapter IV.
+- Names, the exact theft and penalty, dialogue, stage counts: free to change in writing and playtests.
 
-**Passes when** a new player escapes without a wall of tutorial text, using more than one route, and knows Renn
-is guilty.
+## 5. Next step
+
+The first production milestone is **Chapter I complete**. Its first internal step is the vertical slice from
+V1 §12: the holding cell, a yard and a rooftop exit, young Renn, one guard with readable patrol, suspicion,
+investigation and chase states, climb, slide, shove, throw, one theft interaction and a checkpoint.
+
+**Not started.** The Godot implementation stays as it is until building begins.
